@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Dictionary.Dictionary;
 
 namespace BoookStoreDatabase2.DAL.Repositories
 {
@@ -35,11 +36,25 @@ namespace BoookStoreDatabase2.DAL.Repositories
             })?.ToListAsync();
             return result;
         }
+
+
+        public async Task<UserDTO> GetUserByUserName(string userName)
+        {
+            var result = await _dbContext.Users.Include(t=>t.User)?.FirstOrDefaultAsync(x => x.Email == userName || x.UserName == userName);
+            return  new UserDTO
+            {
+                FirstName = result.Customer != null ? result.Customer.FirstName : result.User.FirstName,
+                LastName = result.Customer != null ? result.Customer.LastName : result.User.LastName,
+                UserRole = result.Customer != null ? Roles.Customer : Roles.Administrator,
+                UserName = result.UserName,
+                Email = result.Email
+            };
+        }
         public async Task<SignInResult> Login(LoginViewModel loginViewModel)
         {
 
             return await _signInManager.PasswordSignInAsync(loginViewModel.UserName,
-                loginViewModel.Password, loginViewModel.RememberMe, false);
+                loginViewModel.Password, loginViewModel.RememberMe.Value, false);
         }
     }
 }

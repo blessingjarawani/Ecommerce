@@ -1,4 +1,7 @@
-﻿using BoookStoreDatabase2.BLL.ViewModels;
+﻿using BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
+using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
+using BoookStoreDatabase2.BLL.Models;
+using BoookStoreDatabase2.BLL.ViewModels;
 using BoookStoreDatabase2.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,17 +16,17 @@ namespace Book_Store_.Net_Core.Api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        public SignInManager<ApplicationUser> _signInManager { get; }
-        public AccountController(SignInManager<ApplicationUser> signInManager)
-        {
-            _signInManager = signInManager;
-        }
+        private readonly IApplicationUsersService _applicationUsersService;
 
+        public AccountController(IApplicationUsersService applicationUsersService)
+        {
+            _applicationUsersService = applicationUsersService;
+        }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
+            //await _signInManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
 
@@ -34,13 +37,8 @@ namespace Book_Store_.Net_Core.Api.Controllers
         //}
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login([FromBody] LoginViewModel loginViewModel)
-        {
-           
-                var loginResult = await _signInManager.PasswordSignInAsync(loginViewModel.UserName,
-                    loginViewModel.Password, loginViewModel.RememberMe, false);
-
-        }
+        public async Task<Response<AuthenticateResponse>> Login([FromBody] LoginViewModel loginViewModel)
+        => await _applicationUsersService.Authenticate(loginViewModel);
     }
 }
 

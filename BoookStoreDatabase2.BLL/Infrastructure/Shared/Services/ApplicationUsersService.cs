@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
 {
-    public class ApplicationUsersService :IApplicationUsersService
+    public class ApplicationUsersService : IApplicationUsersService
 
     {
         private readonly IApplicationUsersRepository _repo;
@@ -31,30 +31,22 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
         {
             try
             {
-              
+
                 var user = await _repo.Login(request);
                 if (!user.Succeeded)
-                { 
-                    return new Response<AuthenticateResponse> { Success = false, Message = "Invalid User"};
+                {
+                    return new Response<AuthenticateResponse> { Success = false, Message = "Invalid User" };
                 }
 
-                var login = new UserDTO
-                {
-                    UserName = user..UserName,
-                    FirstName = result.FirstName,
-                    UserId = result.Id,
-                    LastName = result.LastName,
-                    UserRole = result.UserRole
-                };
+                var login = await _repo.GetUserByUserName(request.UserName);
 
-                var token = generateJwtToken(user);
+                var token = generateJwtToken(login);
 
-                return new AuthenticateResponse(user, token);
+                return new Response<AuthenticateResponse> { Success = true, Data = new AuthenticateResponse(login, token) };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);
-                return null;
+                return new Response<AuthenticateResponse> { Success = false, Message = ex.GetBaseException().Message };
             }
 
         }

@@ -10,9 +10,6 @@ namespace Book_Store_.Net_Core.Api.Controllers
     [ApiController]
     public class ApplicationUsersController : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+       
     }
 }

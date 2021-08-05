@@ -31,30 +31,31 @@ namespace BoookStoreDatabase2.WEB.Controllers
         //    return View();
         //}
 
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                var loginResult = await _signInManager.PasswordSignInAsync(loginViewModel.UserName,
-                    loginViewModel.Password, loginViewModel.RememberMe, false);
+        //[HttpPost]
+        //public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
+        //{
+        //    //    if (ModelState.IsValid)
+        //    //    {
+        //    //        var loginResult = await _signInManager.PasswordSignInAsync(loginViewModel.UserName,
+        //    //            loginViewModel.Password, loginViewModel.RememberMe, false);
 
-                if (loginResult.Succeeded)
-                {
-                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-                    {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return RedirectToAction("index", "home");
-                    }
-                }
-                ModelState.AddModelError(string.Empty, "Invalid Login");
+        //    //        if (loginResult.Succeeded)
+        //    //        {
+        //    //            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+        //    //            {
+        //    //                return Redirect(returnUrl);
+        //    //            }
+        //    //            else
+        //    //            {
+        //    //                return RedirectToAction("index", "home");
+        //    //            }
+        //    //        }
+        //    //        ModelState.AddModelError(string.Empty, "Invalid Login");
 
-            }
+        //    //    }
 
-            return View(loginViewModel);
-        }
+        //    //    return View(loginViewModel);
+        //    //}
+        //}
     }
 }

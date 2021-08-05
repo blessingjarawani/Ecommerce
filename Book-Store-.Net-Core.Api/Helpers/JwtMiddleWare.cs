@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BoookStoreDatabase2.BLL.Infrastructure.Shared.Config;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Book_Store_.Net_Core.Api.Helpers
@@ -52,8 +55,8 @@ namespace Book_Store_.Net_Core.Api.Helpers
                 var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
 
                 // attach user to context on successful jwt validation
-                var user = await userService.GetById(userId);
-                currentUser.Set(user);
+                //var user = await userService.GetById(userId);
+                //currentUser.Set(user);
             }
             catch (Exception ex)
             {

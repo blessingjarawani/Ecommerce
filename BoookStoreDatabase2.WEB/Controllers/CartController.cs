@@ -17,49 +17,6 @@ namespace BoookStoreDatabase2.WEB.Controllers
     [Authorize(Roles = "Customer")]
     public class CartController : BaseController
     {
-        public ICartService _cartService { get; }
-        public IProductsService _productsService { get; }
-
-        public CartController(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, ICartService cartService, IProductsService productsService) : base(httpContextAccessor, userManager)
-        {
-            _cartService = cartService;
-            _productsService = productsService;
-        }
-        public async Task<IActionResult> AddToCart(int id)
-        {
-            if (ModelState.IsValid && id > 0)
-            {
-                var userId = await GetUserId();
-                var product = await _productsService.GetProduct(id);
-                if (!product.Success)
-                {
-                }
-                var command = new AddToCartCommand
-                {
-                    CustomerId = userId,
-                    Product = product.Data
-                };
-                var result = await _cartService.AddToCart(command);
-                if (result.Success)
-                {
-                    return RedirectToAction("Details","Cart");
-                }
-
-                return RedirectToAction(product.Data.ProductType.ToString(), "Product");
-            }
-
-            return View();
-        }
-        [HttpGet]
-        public async Task<IActionResult> Details()
-        {
-            var userId = await GetUserId();
-            var result = await _cartService.GetCustomerCart(userId);
-            if (!result.Success)
-            {
-                return View(null);
-            }
-            return View(result.Data);
-        }
+      
     }
 }

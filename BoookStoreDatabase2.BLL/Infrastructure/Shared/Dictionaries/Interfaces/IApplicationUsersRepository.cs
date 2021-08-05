@@ -12,5 +12,6 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces
     {
         Task<List<ApplicationUsersDTO>> GetAll();
         Task<SignInResult> Login(LoginViewModel loginViewModel);
+        Task<UserDTO> GetUserByUserName(string userName);
     }
 }
