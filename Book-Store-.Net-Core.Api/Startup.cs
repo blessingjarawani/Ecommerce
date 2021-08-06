@@ -101,12 +101,12 @@ namespace Book_Store_.Net_Core.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseAuthorization();
-
+          
             app.UseCors(x => x
               .AllowAnyOrigin()
               .AllowAnyMethod()

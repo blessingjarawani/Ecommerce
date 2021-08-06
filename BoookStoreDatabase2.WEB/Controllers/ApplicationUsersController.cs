@@ -12,19 +12,19 @@ namespace BoookStoreDatabase2.WEB.Controllers
     [Authorize(Roles = "Employee")]
     public class ApplicationUsersController : Controller
     {
-        private IApplicationUsersService _applicationUsersService { get; }
+        //private IApplicationUsersService _applicationUsersService { get; }
 
-        public ApplicationUsersController(IApplicationUsersService applicationUsersService)
-        {
-            _applicationUsersService = applicationUsersService;
-        }
+        //public ApplicationUsersController(IApplicationUsersService applicationUsersService)
+        //{
+        //    _applicationUsersService = applicationUsersService;
+        //}
 
 
-        public async Task<IActionResult> Index()
-        {
-            var users = await _applicationUsersService.GetAllUsers();
-            return View(users.Data);
-        }
+        //public async Task<IActionResult> Index()
+        //{
+        //    var users = await _applicationUsersService.GetAllUsers();
+        //    return View(users.Data);
+        //}
        
     }
 }

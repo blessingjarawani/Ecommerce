@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +19,7 @@ using BoookStoreDatabase2.DAL.Repositories;
 using BoookStoreDatabase2.BLL.Infrastructure.Shared.Services;
 using AutoMapper;
 using BoookStoreDatabase2.DAL.Mappers;
+using ECommerce.WEB.EcommerceHttpClient;
 
 namespace BoookStoreDatabase2.WEB
 {
@@ -35,15 +35,16 @@ namespace BoookStoreDatabase2.WEB
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+            services.AddTransient<IECommerceHttpClient, ECommerceHttpClient>();
         }
 
 
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager,
-                 RoleManager<IdentityRole> roleManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -62,7 +63,7 @@ namespace BoookStoreDatabase2.WEB
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

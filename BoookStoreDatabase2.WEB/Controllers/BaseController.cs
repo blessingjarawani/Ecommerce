@@ -13,7 +13,7 @@ using static BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Dictiona
 
 namespace BoookStoreDatabase2.WEB.Controllers
 {
-    [Authorize]
+ 
     public class BaseController : Controller
     {
     }
