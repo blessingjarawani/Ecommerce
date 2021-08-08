@@ -14,7 +14,7 @@ namespace ECommerce.WEB.EcommerceHttpClient
         public HttpClient InitClient()
         {
             httpClient = new HttpClient();
-            httpClient.Timeout = new TimeSpan(0, 0, 0, 5);
+            httpClient.Timeout = new TimeSpan(0, 0, 0, 20);
            
             return httpClient;
         }

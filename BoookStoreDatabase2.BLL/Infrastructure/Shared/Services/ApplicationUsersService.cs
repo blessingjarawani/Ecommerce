@@ -41,8 +41,9 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
                 var login = await _repo.GetUserByUserName(request.UserName);
 
                 var token = generateJwtToken(login);
+                var authResponse = new AuthenticateResponse(login, token);
 
-                return new Response<AuthenticateResponse> { Success = true, Data = new AuthenticateResponse(login, token) };
+                return new Response<AuthenticateResponse> { Success = true, Data = authResponse};
             }
             catch (Exception ex)
             {

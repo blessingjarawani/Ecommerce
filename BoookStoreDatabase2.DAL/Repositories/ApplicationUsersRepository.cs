@@ -40,8 +40,8 @@ namespace BoookStoreDatabase2.DAL.Repositories
 
         public async Task<UserDTO> GetUserByUserName(string userName)
         {
-            var result = await _dbContext.Users.Include(t=>t.User)?.FirstOrDefaultAsync(x => x.Email == userName || x.UserName == userName);
-            return  new UserDTO
+            var result = await _dbContext.Users.Include(t => t.User).Include(y => y.Customer)?.FirstOrDefaultAsync(x => x.Email == userName || x.UserName == userName);
+            return new UserDTO
             {
                 FirstName = result.Customer != null ? result.Customer.FirstName : result.User.FirstName,
                 LastName = result.Customer != null ? result.Customer.LastName : result.User.LastName,

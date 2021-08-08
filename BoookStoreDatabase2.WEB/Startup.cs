@@ -20,6 +20,7 @@ using BoookStoreDatabase2.BLL.Infrastructure.Shared.Services;
 using AutoMapper;
 using BoookStoreDatabase2.DAL.Mappers;
 using ECommerce.WEB.EcommerceHttpClient;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace BoookStoreDatabase2.WEB
 {
@@ -38,6 +39,8 @@ namespace BoookStoreDatabase2.WEB
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddTransient<IECommerceHttpClient, ECommerceHttpClient>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(t=>t.LoginPath="/account/Login");
         }
 
 
@@ -57,13 +60,15 @@ namespace BoookStoreDatabase2.WEB
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            CookieAuthenticationOptions options = new
+            CookieAuthenticationOptions();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
-            //app.UseAuthorization();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
