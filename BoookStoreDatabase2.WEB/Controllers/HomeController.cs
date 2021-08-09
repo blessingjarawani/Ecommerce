@@ -9,11 +9,18 @@ using BoookStoreDatabase2.WEB.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using BoookStoreDatabase2.DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
+using ECommerce.WEB.EcommerceHttpClient;
 
 namespace BoookStoreDatabase2.WEB.Controllers
 {
+
     public class HomeController : BaseController
     {
+        public HomeController(IECommerceHttpClient httpClient) : base(httpClient)
+        {
+
+        }
         //    private readonly ILogger<HomeController> _logger;
 
         //    public HomeController(ILogger<HomeController> logger, IHttpContextAccessor httpContextAccessor,
@@ -32,11 +39,10 @@ namespace BoookStoreDatabase2.WEB.Controllers
             return View();
         }
 
-        //    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //    public IActionResult Error()
-        //    {
-        //        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //    }
-        //}
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
     }
 }

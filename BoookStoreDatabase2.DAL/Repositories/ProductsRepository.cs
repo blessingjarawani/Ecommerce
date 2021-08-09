@@ -46,7 +46,7 @@ namespace BoookStoreDatabase2.DAL.Repositories
             }
             else
             {
-               product = AddProduct(productsDTO);
+                product = AddProduct(productsDTO);
             }
 
             return await SaveChangesAsync() == true ? product.Id : 0;
@@ -65,7 +65,6 @@ namespace BoookStoreDatabase2.DAL.Repositories
         {
             var product = new Product
             {
-                Id = GenerateId(),
                 Name = productsDTO.Name,
                 ImagePath = productsDTO.ImagePath,
                 IsActive = true,

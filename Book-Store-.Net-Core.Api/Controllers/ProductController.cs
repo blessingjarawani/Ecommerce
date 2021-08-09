@@ -1,6 +1,7 @@
 ﻿using BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
 using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
 using BoookStoreDatabase2.BLL.Models.DTO;
+using Ecommerce.BLL.Models.DTO;
 using Ecommerce.BLL.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -27,56 +28,40 @@ namespace Book_Store_.Net_Core.Api.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<List<ProductsDTO>> Index(bool? price = null, bool? name = null)
+        public async Task<List<ProductsDTO>> GetProducts([FromBody] ProductSearchDTO productSearch = null)
         {
 
             var result = await _productsService.GetProducts();
-            if (price.HasValue && price.Value == true)
+            if (productSearch != null)
             {
-                result.Data = result.Data?.OrderBy(x => x.Price).ToList();
-            }
-            if (name.HasValue && name.Value == true)
-            {
-                result.Data = result.Data?.OrderBy(x => x.Name).ToList();
+                if (productSearch.price.HasValue && productSearch.price.Value == true)
+                {
+                    result.Data = result.Data?.OrderBy(x => x.Price).ToList();
+                }
+                if (productSearch.name.HasValue && productSearch.name.Value == true)
+                {
+                    result.Data = result.Data?.OrderBy(x => x.Name).ToList();
+                }
             }
             return result.Data;
         }
         [HttpPost("[action]")]
-        public async Task<Response<int>> Create([FromBody] CreateProductViewModel model)
+        public async Task<Response<int>> Create([FromBody] ProductsDTO model)
         {
 
-            string uniqueFileName = null;
-            if (model.Image != null)
-            {
-                string uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "images");
-                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Image.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-                model.Image.CopyTo(new FileStream(filePath, FileMode.Create));
-            }
-
-            var product = new ProductsDTO
-            {
-                Id = model.Id,
-                Name = model.Name,
-                ImagePath = uniqueFileName,
-                ProductType = model.ProductType,
-                Price = model.Price,
-                Quantity = model.Quantity
-            };
-
-            return await _productsService.AddProduct(product);
+            return await _productsService.AddProduct(model);
 
         }
 
 
         [HttpPost("[action]")]
-        public async Task<Response<ProductsDTO>> Details(int id) =>
-        await _productsService.GetProduct(id);
+        public async Task<Response<ProductsDTO>> Details([FromBody]ProductSearchDTO dto) =>
+        await _productsService.GetProduct(dto.Id.Value);
 
         [HttpPost("[action]")]
 
-        public async Task<Response<ProductsDTO>> Edit(int id) =>
-        await _productsService.GetProduct(id);
+        public async Task<Response<ProductsDTO>> Edit([FromBody]ProductSearchDTO dto) =>
+        await _productsService.GetProduct(dto.Id.Value);
 
     }
 }

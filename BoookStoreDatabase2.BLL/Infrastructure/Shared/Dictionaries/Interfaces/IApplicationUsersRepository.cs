@@ -1,5 +1,6 @@
 ﻿using BoookStoreDatabase2.BLL.Models.DTO;
 using BoookStoreDatabase2.BLL.ViewModels;
+using Ecommerce.BLL.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces
         Task<List<ApplicationUsersDTO>> GetAll();
         Task<SignInResult> Login(LoginViewModel loginViewModel);
         Task<UserDTO> GetUserByUserName(string userName);
+        Task<IdentityResult> Register(RegisterUserViewModel user);
+
     }
 }

@@ -39,6 +39,7 @@ namespace BoookStoreDatabase2.WEB
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddTransient<IECommerceHttpClient, ECommerceHttpClient>();
+            services.AddSession(options => options.IdleTimeout = TimeSpan.FromMinutes(20));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(t=>t.LoginPath="/account/Login");
         }
@@ -64,7 +65,7 @@ namespace BoookStoreDatabase2.WEB
             CookieAuthenticationOptions();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();

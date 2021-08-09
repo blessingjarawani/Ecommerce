@@ -4,6 +4,7 @@ using BoookStoreDatabase2.BLL.Models.DTO;
 using BoookStoreDatabase2.BLL.ViewModels;
 using BoookStoreDatabase2.DAL.Context;
 using BoookStoreDatabase2.DAL.Entities;
+using Ecommerce.BLL.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,10 +19,15 @@ namespace BoookStoreDatabase2.DAL.Repositories
 {
     public class ApplicationUsersRepository : BaseRepository, IApplicationUsersRepository
     {
-        public SignInManager<ApplicationUser> _signInManager { get; }
-        public ApplicationUsersRepository(StoreContext storesDbContext, SignInManager<ApplicationUser> signInManager, IMapper mapper = null) : base(storesDbContext, mapper)
+        private SignInManager<ApplicationUser> _signInManager { get; }
+        private RoleManager<IdentityRole> _roleManager { get; }
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ApplicationUsersRepository(StoreContext storesDbContext, SignInManager<ApplicationUser> signInManager,
+                   RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IMapper mapper = null) : base(storesDbContext, mapper)
         {
             _signInManager = signInManager;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         public async Task<List<ApplicationUsersDTO>> GetAll()
@@ -47,7 +53,8 @@ namespace BoookStoreDatabase2.DAL.Repositories
                 LastName = result.Customer != null ? result.Customer.LastName : result.User.LastName,
                 UserRole = result.Customer != null ? Roles.Customer : Roles.Administrator,
                 UserName = result.UserName,
-                Email = result.Email
+                Email = result.Email,
+                UserId = result.Customer != null ? result.Customer.Id : result.User.Id,
             };
         }
         public async Task<SignInResult> Login(LoginViewModel loginViewModel)
@@ -55,6 +62,28 @@ namespace BoookStoreDatabase2.DAL.Repositories
 
             return await _signInManager.PasswordSignInAsync(loginViewModel.UserName,
                 loginViewModel.Password, loginViewModel.RememberMe.Value, false);
+        }
+
+        public async Task<IdentityResult> Register(RegisterUserViewModel user)
+        {
+            var appUser = new ApplicationUser
+            {
+                Email = user.EmailAddress,
+                UserName = user.UserName,
+
+                Customer = new Customer { FirstName = user.FirstName, LastName = user.LastName, IsActive = true, DOB = DateTime.Parse("1994-01-01") }
+            };
+            if (_userManager.FindByNameAsync(user.EmailAddress).Result == null)
+            {
+                var result = await _userManager.CreateAsync(appUser, user.Password);
+                if (result.Succeeded)
+                {
+                    var role = "Customer";
+                    _userManager.AddToRoleAsync(appUser, role).Wait();
+                }
+                return result;
+            }
+            return null;
         }
     }
 }

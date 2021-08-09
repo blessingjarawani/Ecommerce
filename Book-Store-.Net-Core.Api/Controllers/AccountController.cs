@@ -3,6 +3,7 @@ using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
 using BoookStoreDatabase2.BLL.Models;
 using BoookStoreDatabase2.BLL.ViewModels;
 using BoookStoreDatabase2.DAL.Entities;
+using Ecommerce.BLL.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -22,23 +23,13 @@ namespace Book_Store_.Net_Core.Api.Controllers
         {
             _applicationUsersService = applicationUsersService;
         }
-
-        [HttpPost("[action]")]
-        public async Task<IActionResult> Logout()
-        {
-            //await _signInManager.SignOutAsync();
-            return RedirectToAction("index", "home");
-        }
-
-        //[HttpGet]
-        //public IActionResult Login()
-        //{
-        //    return View();
-        //}
-
         [HttpPost("[action]")]
         public async Task<Response<AuthenticateResponse>> Login([FromBody] LoginViewModel loginViewModel)
         => await _applicationUsersService.Authenticate(loginViewModel);
+
+        [HttpPost("[action]")]
+        public async Task<Response<bool>> Register([FromBody] RegisterUserViewModel request)
+        => await _applicationUsersService.Register(request);
     }
 }
 

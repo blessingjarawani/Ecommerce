@@ -15,8 +15,10 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Dictionary
 
         public enum ProductType
         {
-            Books = 1,
-            Movies = 2
+            Accessories = 1,
+            Phones = 2,
+            Television = 3
+
         }
 
         public enum Roles

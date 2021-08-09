@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = "Products List";
 }
-@if (User.IsInRole("Employee"))
+@if (User.IsInRole("Administrator"))
 { 
     <div class="ibox-title">
         <a asp-controller="product" asp-action="create"

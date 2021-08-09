@@ -4,6 +4,7 @@ using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
 using BoookStoreDatabase2.BLL.Models;
 using BoookStoreDatabase2.BLL.Models.DTO;
 using BoookStoreDatabase2.BLL.ViewModels;
+using Ecommerce.BLL.ViewModels;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -43,7 +44,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
                 var token = generateJwtToken(login);
                 var authResponse = new AuthenticateResponse(login, token);
 
-                return new Response<AuthenticateResponse> { Success = true, Data = authResponse};
+                return new Response<AuthenticateResponse> { Success = true, Data = authResponse };
             }
             catch (Exception ex)
             {
@@ -69,6 +70,25 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public async Task<Response<bool>> Register(RegisterUserViewModel request)
+        {
+            try
+            {
+
+                var user = await _repo.Register(request);
+                if (user == null || !user.Succeeded)
+                {
+                    return new Response<bool> { Success = false, Message = "Failed To Register User" };
+                }
+
+                return new Response<bool> { Success = true, Data = true };
+            }
+            catch (Exception ex)
+            {
+                return new Response<bool> { Success = false, Message = ex.GetBaseException().Message };
+            }
         }
     }
 }

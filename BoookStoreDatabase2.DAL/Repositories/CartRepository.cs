@@ -49,7 +49,6 @@ namespace BoookStoreDatabase2.DAL.Repositories
         {
             var orderLine = new OrderLines
             {
-                Id = GenerateId(),
                 IsActive = true,
                 CustomerId = cartCommand.CustomerId,
                 Quantity = 1,

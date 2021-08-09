@@ -2,9 +2,11 @@
 using BoookStoreDatabase2.BLL.Models;
 using BoookStoreDatabase2.DAL.Entities;
 using BoookStoreDatabase2.WEB.Models.ViewModels;
+using Ecommerce.BLL.ViewModels;
 using ECommerce.WEB.EcommerceHttpClient;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -42,7 +44,31 @@ namespace BoookStoreDatabase2.WEB.Controllers
         {
             return View();
         }
-
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterUserViewModel registerViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _client.PostAsync("http://localhost:45447/api/Account/Register", new StringContent(JsonConvert.SerializeObject(registerViewModel), Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<Response<bool>>(content);
+                    if (!result.Success)
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                        return View(registerViewModel);
+                    }
+                    return RedirectToAction("login", "account");
+                }
+            }
+            return View(registerViewModel);
+        }
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
@@ -60,10 +86,11 @@ namespace BoookStoreDatabase2.WEB.Controllers
                             ModelState.AddModelError(string.Empty, "Invalid Login");
                             return View(loginViewModel);
                         }
+                        HttpContext.Session.SetString("token", result.Data.Token);
                         var claims = new List<Claim>() {
                         new Claim(ClaimTypes.NameIdentifier, Convert.ToString(result.Data.UserId)),
                         new Claim(ClaimTypes.Name, result.Data.UserName),
-                        new Claim(ClaimTypes.Role, result.Data.UserRole.ToString()),
+                        new Claim(ClaimTypes.Role, result.Data.UserRole.ToString())
                         };
                         //Initialize a new instance of the ClaimsIdentity with the claims and authentication scheme    
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

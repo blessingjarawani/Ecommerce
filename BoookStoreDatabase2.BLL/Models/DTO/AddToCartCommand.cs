@@ -7,6 +7,9 @@ namespace BoookStoreDatabase2.BLL.Models.DTO
     public class AddToCartCommand
     {
         public int CustomerId { get; set; }
+
+        public int ProductId { get; set; }
+        public int UserId { get; set; }
         public ProductsDTO Product { get; set; }
 
         public bool IsValid => CustomerId > 0

@@ -2,6 +2,7 @@
 using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
 using BoookStoreDatabase2.BLL.Models.DTO;
 using BoookStoreDatabase2.DAL.Entities;
+using Ecommerce.BLL.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,27 +27,25 @@ namespace Book_Store_.Net_Core.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<Response<bool>> AddToCart(int id)
+        public async Task<Response<bool>> AddToCart([FromBody] AddToCartCommand addToCartCommand)
         {
 
-            var userId = await GetUserId();
-            var product = await _productsService.GetProduct(id);
+            var product = await _productsService.GetProduct(addToCartCommand.ProductId);
             if (!product.Success)
             {
             }
             var command = new AddToCartCommand
             {
-                CustomerId = userId,
+                CustomerId = addToCartCommand.CustomerId,
                 Product = product.Data
             };
             return await _cartService.AddToCart(command);
 
         }
         [HttpPost("[action]")]
-        public async Task<Response<List<OrderLineDTO>>> Details()
+        public async Task<Response<List<OrderLineDTO>>> Details([FromBody] ProductSearchDTO productSearch)
         {
-            var userId = await GetUserId();
-            return await _cartService.GetCustomerCart(userId);
+            return await _cartService.GetCustomerCart(productSearch.Id.Value);
         }
     }
 }
