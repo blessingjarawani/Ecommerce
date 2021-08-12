@@ -18,6 +18,10 @@ namespace BoookStoreDatabase2.WEB
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                 .ConfigureLogging(logbuilder =>
+                 {
+                 logbuilder.ClearProviders();
+                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

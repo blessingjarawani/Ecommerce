@@ -39,9 +39,10 @@ namespace BoookStoreDatabase2.DAL.Repositories
 
         public async Task<int> AddOrUpdate(ProductsDTO productsDTO)
         {
-            var product = _dbContext.Products.FirstOrDefault(x => x.Id == productsDTO.Id);
-            if (product != null)
+            Product product;
+            if (productsDTO.Id != 0)
             {
+                product = _dbContext.Products.FirstOrDefault(x => x.Id == productsDTO.Id);
                 UpdateProduct(productsDTO, product);
             }
             else
@@ -49,7 +50,7 @@ namespace BoookStoreDatabase2.DAL.Repositories
                 product = AddProduct(productsDTO);
             }
 
-            return await SaveChangesAsync() == true ? product.Id : 0;
+            return await SaveChangesAsync() ? product.Id : 0;
         }
 
         private void UpdateProduct(ProductsDTO productsDTO, Product product)

@@ -112,7 +112,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
 
 
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-                var response = await _client.PostAsync("http://localhost:45447/api/Product/Create", new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json"));
+                var response = await _client.PostAsync("http://localhost:45447/api/Product/CreateOrUpdate", new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json"));
                 var content = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<Response<int>>(content);
                 if (result.Success)
@@ -141,16 +141,25 @@ namespace BoookStoreDatabase2.WEB.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+       
+        public async Task<IActionResult> GetProduct(int id)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-            var response = await _client.PostAsync($"http://localhost:45447/api/Product/Edit", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
+            var response = await _client.PostAsync($"http://localhost:45447/api/Product/GetProduct", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<Response<ProductsDTO>>(content);
             if (result.Success)
             {
-                return View(result.Data);
+                var editProduct = new EditProductViewModel
+                {
+                    ExistingPhotoPath = result.Data.ImagePath,
+                    Id = result.Data.Id,
+                    Name = result.Data.Name,
+                    ProductType = result.Data.ProductType,
+                    Quantity = result.Data.Quantity,
+                    Price = result.Data.Price
+                };
+                return View(editProduct);
             }
             ModelState.AddModelError(string.Empty, result.Message);
             return View();

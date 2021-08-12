@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Book_Store_.Net_Core.Api.Controllers
+namespace Ecommerce.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -46,10 +46,10 @@ namespace Book_Store_.Net_Core.Api.Controllers
             return result.Data;
         }
         [HttpPost("[action]")]
-        public async Task<Response<int>> Create([FromBody] ProductsDTO model)
+        public async Task<Response<int>> CreateOrUpdate([FromBody] ProductsDTO model)
         {
 
-            return await _productsService.AddProduct(model);
+            return await _productsService.CreateOrUpdateProduct(model);
 
         }
 
@@ -60,7 +60,7 @@ namespace Book_Store_.Net_Core.Api.Controllers
 
         [HttpPost("[action]")]
 
-        public async Task<Response<ProductsDTO>> Edit([FromBody]ProductSearchDTO dto) =>
+        public async Task<Response<ProductsDTO>> GetProduct([FromBody]ProductSearchDTO dto) =>
         await _productsService.GetProduct(dto.Id.Value);
 
     }

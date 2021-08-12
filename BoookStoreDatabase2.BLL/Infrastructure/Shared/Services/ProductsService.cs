@@ -46,7 +46,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
 
         }
 
-        public async Task<Response<int>> AddProduct(ProductsDTO productsDTO)
+        public async Task<Response<int>> CreateOrUpdateProduct(ProductsDTO productsDTO)
         {
             try
             {

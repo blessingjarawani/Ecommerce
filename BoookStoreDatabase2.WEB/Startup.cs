@@ -21,6 +21,8 @@ using AutoMapper;
 using BoookStoreDatabase2.DAL.Mappers;
 using ECommerce.WEB.EcommerceHttpClient;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace BoookStoreDatabase2.WEB
 {
@@ -48,7 +50,7 @@ namespace BoookStoreDatabase2.WEB
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -78,6 +80,7 @@ namespace BoookStoreDatabase2.WEB
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+            loggerFactory.AddFile(Directory.GetCurrentDirectory() + "/Logs/log-{Date}.log");
         }
     }
 }

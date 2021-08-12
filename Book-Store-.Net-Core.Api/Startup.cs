@@ -8,7 +8,7 @@ using BoookStoreDatabase2.DAL.Entities;
 using BoookStoreDatabase2.DAL.Mappers;
 using BoookStoreDatabase2.DAL.Repositories;
 using BoookStoreDatabase2.DAL.SeedData;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer; 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,8 +20,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +67,7 @@ namespace Book_Store_.Net_Core.Api
             services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>(),
                              AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
+            AddSwagger(services);
             var authConfig = new AppSettings();
             Configuration.GetSection("AppSettings").Bind(authConfig);
 
@@ -84,7 +87,7 @@ namespace Book_Store_.Net_Core.Api
                     ValidateAudience = false
                 };
             });
-
+           
         }
 
         public void ConfigureDatabase(IServiceCollection services)
@@ -93,30 +96,36 @@ namespace Book_Store_.Net_Core.Api
             services.AddDbContextPool<StoreContext>(options =>
              options.UseSqlServer(Configuration.GetConnectionString("StoreContext")));
         }
+
+        private void AddSwagger(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ECommerce.Api", Version = "v1" });
+            });
+        }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager,
-                 RoleManager<IdentityRole> roleManager)
+                 RoleManager<IdentityRole> roleManager, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ECommerce.Api v1"));
             }
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
-          
-            app.UseCors(x => x
-              .AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader());
-            //DatabaseInitiliaser.SeedData(userManager, roleManager);
+           //DatabaseInitiliaser.SeedData(userManager, roleManager);
             app.UseMiddleware<JwtMiddleWare>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            loggerFactory.AddFile(Directory.GetCurrentDirectory() + "/Logs/log-{Date}.log");
         }
     }
 }
