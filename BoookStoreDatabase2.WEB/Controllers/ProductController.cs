@@ -55,7 +55,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
 
         }
 
-        [HttpGet]
+
         public async Task<IActionResult> Books(bool? price = null, bool? name = null)
         {
             try
@@ -66,7 +66,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
                     name = name
                 };
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-                var response = await _client.PostAsync($"http://localhost:45447/api/Product/GetProducts", new StringContent(JsonConvert.SerializeObject(productSearch), Encoding.UTF8, "application/json"));
+                var response = await _client.PostAsync($"Product/GetProducts", new StringContent(JsonConvert.SerializeObject(productSearch), Encoding.UTF8, "application/json"));
                 var content = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ProductsDTO>>(content);
 
@@ -81,12 +81,12 @@ namespace BoookStoreDatabase2.WEB.Controllers
 
 
         }
-        [HttpGet]
+       
         public IActionResult Create()
         {
             return View();
         }
-        [HttpPost]
+   
         public async Task<IActionResult> Create(CreateProductViewModel model)
         {
             if (ModelState.IsValid)
@@ -112,7 +112,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
 
 
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-                var response = await _client.PostAsync("http://localhost:45447/api/Product/CreateOrUpdate", new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json"));
+                var response = await _client.PostAsync("Product/CreateOrUpdate", new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json"));
                 var content = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<Response<int>>(content);
                 if (result.Success)
@@ -126,11 +126,11 @@ namespace BoookStoreDatabase2.WEB.Controllers
         }
 
 
-        [HttpGet]
+    
         public async Task<IActionResult> Details(int id)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-            var response = await _client.PostAsync($"http://localhost:45447/api/Product/Details", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
+            var response = await _client.PostAsync($"Product/Details", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<Response<ProductsDTO>>(content);
             if (result.Success)
@@ -145,7 +145,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
         public async Task<IActionResult> GetProduct(int id)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-            var response = await _client.PostAsync($"http://localhost:45447/api/Product/GetProduct", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
+            var response = await _client.PostAsync($"Product/GetProduct", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<Response<ProductsDTO>>(content);
             if (result.Success)

@@ -54,7 +54,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
         {
             if (ModelState.IsValid)
             {
-                var response = await _client.PostAsync("http://localhost:45447/api/Account/Register", new StringContent(JsonConvert.SerializeObject(registerViewModel), Encoding.UTF8, "application/json"));
+                var response = await _client.PostAsync("Account/Register", new StringContent(JsonConvert.SerializeObject(registerViewModel), Encoding.UTF8, "application/json"));
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
@@ -76,7 +76,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var response = await _client.PostAsync("http://localhost:45447/api/Account/Login", new StringContent(JsonConvert.SerializeObject(loginViewModel), Encoding.UTF8, "application/json"));
+                    var response = await _client.PostAsync("Account/Login", new StringContent(JsonConvert.SerializeObject(loginViewModel), Encoding.UTF8, "application/json"));
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();

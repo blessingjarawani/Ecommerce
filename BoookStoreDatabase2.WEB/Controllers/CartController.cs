@@ -40,7 +40,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
                     ProductId = id
                 };
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-                var response = await _client.PostAsync($"http://localhost:45447/api/Cart/AddToCart", new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
+                var response = await _client.PostAsync($"Cart/AddToCart", new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
                 var content = await response.Content.ReadAsStringAsync();
                 var product = JsonConvert.DeserializeObject<Response<bool>>(content);
                 if (!product.Success)
@@ -59,7 +59,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
         {
             var userId = await GetUserId();
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-            var response = await _client.PostAsync($"http://localhost:45447/api/Cart/Details", new StringContent(JsonConvert.SerializeObject(new ProductSearchDTO { Id = int.Parse(userId) }), Encoding.UTF8, "application/json"));
+            var response = await _client.PostAsync($"Cart/Details", new StringContent(JsonConvert.SerializeObject(new ProductSearchDTO { Id = int.Parse(userId) }), Encoding.UTF8, "application/json"));
             var content = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<Response<List<OrderLineDTO>>>(content);
             if (!result.Success)

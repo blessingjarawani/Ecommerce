@@ -21,14 +21,6 @@ namespace BoookStoreDatabase2.WEB.Controllers
         {
 
         }
-        //    private readonly ILogger<HomeController> _logger;
-
-        //    public HomeController(ILogger<HomeController> logger, IHttpContextAccessor httpContextAccessor,
-        //        UserManager<ApplicationUser> userManager) : base(httpContextAccessor, userManager)
-        //    {
-        //        _logger = logger;
-        //    }
-
         public IActionResult Index()
         {
             return View();
