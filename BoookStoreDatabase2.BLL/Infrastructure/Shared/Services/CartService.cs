@@ -1,6 +1,7 @@
 ﻿using BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
 using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
 using BoookStoreDatabase2.BLL.Models.DTO;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,9 +13,12 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
     {
         private ICartRepository _cartRepository { get; }
 
-        public CartService(ICartRepository cartRepository)
+        private readonly ILogger<CartService> _logger;
+
+        public CartService(ICartRepository cartRepository, ILogger<CartService> logger)
         {
             _cartRepository = cartRepository;
+            _logger = logger;
         }
         public async Task<Response<bool>> AddToCart(AddToCartCommand addToCartCommand)
         {
@@ -30,6 +34,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.GetBaseException().Message);
                 return new Response<bool> { Success = false, Message = ex.GetBaseException().Message };
             }
 
@@ -44,6 +49,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.GetBaseException().Message);
                 return new Response<List<OrderLineDTO>> { Success = false, Message = ex.GetBaseException().Message };
             }
         }

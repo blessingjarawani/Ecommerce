@@ -5,6 +5,7 @@ using BoookStoreDatabase2.BLL.Models;
 using BoookStoreDatabase2.BLL.Models.DTO;
 using BoookStoreDatabase2.BLL.ViewModels;
 using Ecommerce.BLL.ViewModels;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -21,10 +22,13 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
     {
         private readonly IApplicationUsersRepository _repo;
         private readonly AppSettings _appSettings;
-        public ApplicationUsersService(IApplicationUsersRepository repo, IOptions<AppSettings> appSettings)
+        private readonly ILogger<ApplicationUsersService> _logger;
+
+        public ApplicationUsersService(IApplicationUsersRepository repo, IOptions<AppSettings> appSettings, ILogger<ApplicationUsersService> logger)
         {
             _repo = repo;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
 
@@ -48,6 +52,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.GetBaseException().Message);
                 return new Response<AuthenticateResponse> { Success = false, Message = ex.GetBaseException().Message };
             }
 
@@ -87,6 +92,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.GetBaseException().Message);
                 return new Response<bool> { Success = false, Message = ex.GetBaseException().Message };
             }
         }

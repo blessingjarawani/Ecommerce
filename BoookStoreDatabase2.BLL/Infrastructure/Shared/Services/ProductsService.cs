@@ -1,6 +1,7 @@
 ﻿using BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
 using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
 using BoookStoreDatabase2.BLL.Models.DTO;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -13,9 +14,13 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
     public class ProductsService : IProductsService
     {
         private IProductsRepository _productsRepository { get; }
-        public ProductsService(IProductsRepository productsRepository)
+
+        private readonly ILogger<ProductsService> _logger;
+
+        public ProductsService(IProductsRepository productsRepository, ILogger<ProductsService> logger)
         {
             _productsRepository = productsRepository;
+            _logger = logger;
         }
 
         public async Task<Response<List<ProductsDTO>>> GetProducts(string productType = null)
@@ -27,6 +32,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.GetBaseException().Message);
                 return new Response<List<ProductsDTO>> { Success = false, Message = ex.GetBaseException().Message };
             }
 
@@ -41,6 +47,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.GetBaseException().Message);
                 return new Response<ProductsDTO> { Success = false, Message = ex.GetBaseException().Message };
             }
 
@@ -59,6 +66,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.GetBaseException().Message);
                 return new Response<int> { Success = false, Message = ex.GetBaseException().Message };
             }
         }
