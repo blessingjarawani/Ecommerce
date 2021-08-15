@@ -22,21 +22,21 @@ namespace BoookStoreDatabase2.DAL.Repositories
 
         public async Task<List<OrderLineDTO>> GetCustomerOrder(int customerId)
         {
-            var result = await Task.Run(() => _dbContext.OrderLines
-             .Where(x => x.CustomerId == customerId && x.IsActive)?.Include(x => x.Product)
+            var result = await Task.Run(() => _dbContext.OrderLines.Include(x => x.Product)
+             .Where(x => x.CustomerId == customerId && x.IsActive)
              .AsEnumerable()
-             .GroupBy(x => new { x.CustomerId, x.ProductId })
+             .GroupBy(x => new { x.CustomerId, x.ProductId})
                         .Select(fl => new OrderLineDTO
                         {
                             CustomerId = customerId,
-                            Products = fl.GroupBy(x=>x.ProductId).Select(y=>
+                            Products = fl.Select(y=>
                             new ProductsDTO
                             {
                                 Id = fl.Key.ProductId,
                                 Quantity = fl.Sum(x=>x.Quantity),
-                                Name = fl.FirstOrDefault().Product.Name,
+                                Name =y.Product.Name,
                                 Price = fl.Sum(t => t.Price * t.Quantity),
-                                ProductType = fl.FirstOrDefault().Product.ProductType
+                                ProductType = y.Product.ProductType
                             }).ToList()
                         })
             );

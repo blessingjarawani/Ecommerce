@@ -10,9 +10,7 @@
         <table class="table table-sm table-striped table-hover border-bottom">
             <thead>
                 <tr>
-                    <th class="d-none d-lg-table-cell">
-                        Id
-                    </th>
+
                     <th>
                         Name
                     </th>
@@ -30,24 +28,21 @@
             <tbody>
                 @if (Model != null && Model[0].Products.Count > 0)
                 {
-                    foreach (var item in Model[0].Products)
+                    foreach (var item in Model)
                     {
                         <tr>
-                            <td class="d-none d-lg-table-cell">
-                                @Html.DisplayFor(modelItem => item.Id)
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Products[0].Name)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Quantity)
+                                @Html.DisplayFor(modelItem => item.Products[0].Quantity)
                             </td>
 
                             <td>
-                                @Html.DisplayFor(modelItem => item.Price)
+                                @Html.DisplayFor(modelItem => item.Products[0].Price)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.ProductType)
+                                @Html.DisplayFor(modelItem => item.Products[0].ProductType)
                             </td>
                         </tr>
                     }
