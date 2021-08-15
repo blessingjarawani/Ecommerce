@@ -21,8 +21,13 @@
         <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
             <div class="card-header">
                 <h5>@product.Name</h5>
-                <h5>@product.Price zl</h5>
-                <h4>@product.Quantity</h4>
+                <div class="categoryPrice">Price: <input readonly class="form-control" style="outline:none" id="foodTotal-@product.Id.ToString()" value="@product.Total"></div>
+                <form asp-controller="ShoppingCart" asp-action="Add" method="get" class="form-horizontal" role="form">
+                    <a onclick="changeValue(document.getElementById('amount-input-@product.Id.ToString()'),document.getElementById('foodTotal-@product.Id.ToString()'), @product.Total, 1)"><i class="fas fa-plus-circle"></i></a>
+                    <input id="amount-input-@product.Id" asp-for="@product.Amount" style="width:20%" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                    <a onclick="changeValue(document.getElementById('amount-input-@product.Id.ToString()'),document.getElementById('foodTotal-@product.Id.ToString()'), @product.Total, -1)"><i class="fas fa-minus-circle"></i></a>
+                    
+                </form>
             </div>
             <img class="card-img-top imageThumbnail" src="@photoPath"
                  asp-append-version="true" />
@@ -31,7 +36,7 @@
                    class="btn btn-primary m-1">View</a>
                 @if (User.IsInRole("Customer"))
                 {
-                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-success m-1">Add to Cart</a>
+                    <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@product.Id" asp-route-quantity="@product.Amount" class="btn btn-success m-1">Add to Cart</a>
                 }
 
                 else

@@ -15,5 +15,6 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces
         Task<Response<List<ApplicationUsersDTO>>> GetAllUsers();
         Task<Response<AuthenticateResponse>> Authenticate(LoginViewModel request);
         Task<Response<bool>> Register(RegisterUserViewModel request);
+        Task LockOutUser(string userId);
     }
 }

@@ -10,6 +10,8 @@ namespace BoookStoreDatabase2.BLL.Models.DTO
 
         public int ProductId { get; set; }
         public int UserId { get; set; }
+
+        public int Quantity { get; set; }
         public ProductsDTO Product { get; set; }
 
         public bool IsValid => CustomerId > 0

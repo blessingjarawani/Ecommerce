@@ -37,7 +37,8 @@ namespace Ecommerce.Api.Controllers
             var command = new AddToCartCommand
             {
                 CustomerId = addToCartCommand.CustomerId,
-                Product = product.Data
+                Product = product.Data,
+                Quantity =addToCartCommand.Quantity
             };
             return await _cartService.AddToCart(command);
 

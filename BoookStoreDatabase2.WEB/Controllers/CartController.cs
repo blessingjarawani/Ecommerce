@@ -29,7 +29,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
 
         }
 
-        public async Task<IActionResult> AddToCart(int id)
+        public async Task<IActionResult> AddToCart(int id, int quantity)
         {
             if (ModelState.IsValid && id > 0)
             {
@@ -37,7 +37,9 @@ namespace BoookStoreDatabase2.WEB.Controllers
                 var command = new AddToCartCommand
                 {
                     CustomerId = int.Parse(userId),
-                    ProductId = id
+                    ProductId = id,
+                    Quantity = quantity
+
                 };
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
                 var response = await _client.PostAsync($"Cart/AddToCart", new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));

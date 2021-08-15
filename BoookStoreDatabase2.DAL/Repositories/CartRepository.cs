@@ -24,21 +24,21 @@ namespace BoookStoreDatabase2.DAL.Repositories
         {
             var result = await Task.Run(() => _dbContext.OrderLines
              .Where(x => x.CustomerId == customerId && x.IsActive)?.Include(x => x.Product)
-             .Select(fl => new { fl.CustomerId, fl.ProductId, fl.Price, fl.Quantity, fl.Product.Name, fl.Product.ProductType }).AsEnumerable()
-                         .GroupBy(fl => new { fl.CustomerId })
-                         .Select(fl => new OrderLineDTO
-                         {
-                             CustomerId = fl.Key.CustomerId,
-                             Products = fl.Select(y =>
-                             new ProductsDTO
-                             {
-                                 Id = y.ProductId,
-                                 Quantity = y.Quantity,
-                                 Name = y.Name,
-                                 Price = y.Price,
-                                 ProductType = y.ProductType
-                             }).ToList()
-                         })
+             .AsEnumerable()
+             .GroupBy(x => new { x.CustomerId, x.ProductId })
+                        .Select(fl => new OrderLineDTO
+                        {
+                            CustomerId = customerId,
+                            Products = fl.GroupBy(x=>x.ProductId).Select(y=>
+                            new ProductsDTO
+                            {
+                                Id = fl.Key.ProductId,
+                                Quantity = fl.Sum(x=>x.Quantity),
+                                Name = fl.FirstOrDefault().Product.Name,
+                                Price = fl.Sum(t => t.Price * t.Quantity),
+                                ProductType = fl.FirstOrDefault().Product.ProductType
+                            }).ToList()
+                        })
             );
             return result?.ToList();
         }
@@ -51,7 +51,7 @@ namespace BoookStoreDatabase2.DAL.Repositories
             {
                 IsActive = true,
                 CustomerId = cartCommand.CustomerId,
-                Quantity = 1,
+                Quantity = cartCommand.Quantity,
                 Price = cartCommand.Product.Price,
                 CartStatus = CartStatus.Inprogress,
                 ProductId = cartCommand.Product.Id

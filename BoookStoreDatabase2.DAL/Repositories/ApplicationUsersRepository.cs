@@ -31,18 +31,27 @@ namespace BoookStoreDatabase2.DAL.Repositories
         }
 
         public async Task<List<ApplicationUsersDTO>> GetAll()
+
         {
-            var result = await _dbContext.Users?.Select(x => new ApplicationUsersDTO
+            var result = await _dbContext.Users.Where(x=>x.LockoutEnd==null).Select(x => new ApplicationUsersDTO
             {
                 FirstName = x.Customer != null ? x.Customer.FirstName : x.User.FirstName,
                 LastName = x.Customer != null ? x.Customer.LastName : x.User.LastName,
                 UserType = x.Customer != null ? "Customer" : "Administrator",
                 UserName = x.UserName,
-                Email = x.Email
+                Email = x.Email,
+                Id = x.Id
             })?.ToListAsync();
             return result;
         }
 
+        public async Task LockOutUser(string userId)
+        {
+            var lockoutEndDate = DateTime.Now.AddMonths(2);
+            var user = await _userManager.FindByIdAsync(userId);
+            await _userManager.SetLockoutEnabledAsync(user, true);
+            await _userManager.SetLockoutEndDateAsync(user, lockoutEndDate);
+        }
 
         public async Task<UserDTO> GetUserByUserName(string userName)
         {

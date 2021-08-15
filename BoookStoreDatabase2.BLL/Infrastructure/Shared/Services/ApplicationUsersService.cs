@@ -57,9 +57,17 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
 
         }
-        public Task<Response<List<ApplicationUsersDTO>>> GetAllUsers()
+        public async Task<Response<List<ApplicationUsersDTO>>> GetAllUsers()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _repo.GetAll();
+                return new Response<List<ApplicationUsersDTO>> { Success = true, Data = result };
+            }
+            catch (Exception ex)
+            {
+                return new Response<List<ApplicationUsersDTO>> { Success = false, Message = ex.GetBaseException().Message };
+            }
         }
 
         private string generateJwtToken(UserDTO user)
@@ -76,7 +84,10 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-
+        public async Task LockOutUser(string userId)
+        {
+            await _repo.LockOutUser(userId);
+        }
         public async Task<Response<bool>> Register(RegisterUserViewModel request)
         {
             try
@@ -96,5 +107,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
                 return new Response<bool> { Success = false, Message = ex.GetBaseException().Message };
             }
         }
+
+
     }
 }

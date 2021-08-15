@@ -4,19 +4,52 @@
 @{
     ViewBag.Title = "Users List";
 }
-<div class="card-deck">
-    @foreach (var user in Model)
+<div class="container">
+
+    @foreach (var account in Model)
     {
-        var photoPath = "~/images/noimage.png";
-        <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
-            <div class="card-header">
-                <h5>@user.LastName  @user.FirstName</h5>
-                <h5>@user.UserType</h5>
+        <div class="col-md-8 col-sm-12 pull-left posttimeline">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <p>@account.FirstName @account.LastName</p>
+                            <div>
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse-@account.GetHashCode()">
+                                    Details
+                                </a>
+                            </div>
+                        </h4>
+                    </div>
+                    <div id="collapse-@account.GetHashCode()" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <div class="jumbotron">
+                                <h2 class="display-4">@account.FirstName @account.LastName</h2>
+
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h1 class="page-header small">Personal Details</h1>
+                                        <p class="small">Email: @account.Email</p>
+                                        <p class="small">Role: @account.UserType</p>
+                                    </div>
+                                </div>
+                                <ul class="nav nav-pills pull-left countlist" role="tablist">
+
+                                    <li role="presentation">
+                                        <h3>
+                                            @account.LastName<br>
+                                            <small>Orders placed</small>
+                                        </h3>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <a class="btn btn-primary btn-lg" role="button" asp-action="LockUser" asp-controller="ApplicationUsers" asp-route-userId="@account.Id">Disable</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <img class="card-img-top imageThumbnail" src="@photoPath"
-                 asp-append-version="true" />
-        </div>
-    }
+        </div>}
 </div>
 
 
