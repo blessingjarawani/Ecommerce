@@ -73,6 +73,18 @@ namespace BoookStoreDatabase2.DAL.Repositories
                 loginViewModel.Password, loginViewModel.RememberMe.Value, false);
         }
 
+        public async Task<bool> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
+        {
+
+            var user =  await _userManager.FindByNameAsync(changePasswordViewModel.CurrentUserName);
+            if (user != null)
+            {
+                var result = await _userManager.ChangePasswordAsync(user, changePasswordViewModel.OldPassword, changePasswordViewModel.NewPassword);
+                return result.Succeeded;
+            }
+            return false;
+        }
+
         public async Task<IdentityResult> Register(RegisterUserViewModel user)
         {
             var appUser = new ApplicationUser

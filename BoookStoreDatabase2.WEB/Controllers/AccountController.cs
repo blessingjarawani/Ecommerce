@@ -125,6 +125,34 @@ namespace BoookStoreDatabase2.WEB.Controllers
             }
 
         }
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var currentUserEmail = HttpContext.User?.FindFirst(ClaimTypes.Name).Value;
+                changePasswordViewModel.CurrentUserName = currentUserEmail;
+                var response = await _client.PostAsync("Account/ChangePassword", new StringContent(JsonConvert.SerializeObject(changePasswordViewModel), Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var result = JsonConvert.DeserializeObject<Response<bool>>(content);
+                    if (!result.Success)
+                    {
+                        ModelState.AddModelError(string.Empty, result.Message);
+                        return View(changePasswordViewModel);
+                    }
+                    return RedirectToAction("index", "home");
+                }
+            }
+            return View(changePasswordViewModel);
+        }
     }
 }
 

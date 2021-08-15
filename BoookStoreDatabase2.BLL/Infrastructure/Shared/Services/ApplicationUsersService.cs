@@ -109,5 +109,22 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
         }
 
 
+        public async Task<Response<bool>> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
+        {
+            try
+            {
+                var result = await _repo.ChangePassword(changePasswordViewModel);
+                return result ? new Response<bool> { Success = true } :
+                 new Response<bool> { Success = false, Message = "Password change failed" };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.GetBaseException().Message);
+                return new Response<bool> { Success = false, Message = ex.GetBaseException().Message };
+            }
+
+        }
     }
+
 }
+

@@ -30,6 +30,10 @@ namespace Ecommerce.Api.Controllers
         [HttpPost("[action]")]
         public async Task<Response<bool>> Register([FromBody] RegisterUserViewModel request)
         => await _applicationUsersService.Register(request);
+
+        [HttpPost("[action]")]
+        public async Task<Response<bool>> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
+            => await _applicationUsersService.ChangePassword(changePasswordViewModel);
     }
 }
 
