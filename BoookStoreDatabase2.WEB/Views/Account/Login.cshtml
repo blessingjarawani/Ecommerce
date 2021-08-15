@@ -14,13 +14,13 @@
             <div class="form-group">
                 <label asp-for="UserName"></label>
                 <input id="UserName" name="UserName" type="text" data-val="true" class="form-control"
-                       data-val-required="The UserName field is required." />
+                       data-val-required="The UserName field is required." maxlength="50"/>
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password"></label>
                 <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <span asp-validation-for="Password" class="text-danger" maxlength="50"></span>
             </div>
             <div class="form-group">
                 <div class="checkbox">
