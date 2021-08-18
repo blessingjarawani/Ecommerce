@@ -1,0 +1,32 @@
+  <td>Outlet:</td>
+                    <td>
+                        @Html.DropDownList("searchOutlet",
+                            new SelectListItem[]
+                            {
+                                new SelectListItem() {Text = "---", Value = null, Selected = ViewBag.searchOutlet == null ? true : false},
+                                new SelectListItem() {Text = "TAK", Value = "TAK", Selected = ViewBag.searchOutlet == "tak" ? true : false},
+                                new SelectListItem() {Text = "NIE", Value = "NIE", Selected = ViewBag.searchOutlet == "nie" ? true : false}
+                            }, ViewBag.searchOutlet as string, new { @class = "DropDownList", @style = "width:110px" })
+                    </td>
+					
+					
+					
+					 <tr id="Kanal">
+            <td class="etykieta">Kanał sprzedaży</td>
+            <td>
+                @Html.DropDownListFor(model => model.SpA_KanalSprzedazy, new SelectListItem[]
+                {
+                    new SelectListItem() { Text = "Allegro", Value = "A" },
+                    new SelectListItem() { Text = "Allegro - USZK kurier", Value = "AU" },
+                    new SelectListItem() { Text = "Outlet", Value = "O" },
+                    new SelectListItem() { Text = "Outlet - USZK kurier", Value = "OU" },
+                    new SelectListItem() { Text = "Szkoda(Allegro)", Value = "S" }
+                }, "---", new { @class = "chosen-select", @onchange = "setValues(this)" })
+            </td>
+        </tr>
+		
+	ILogger<ApplicationUsersService> logger
+	
+	  _logger.LogError(ex.GetBaseException().Message);
+	  
+	  https://www.nanomily.com/collections/hot-sale?ids=426666ea-1dbc-4ae1-8ce8-5f66a3c412a9%2C86e8065a-9ede-4146-8b25-55fd93507f2c%2C72e782c9-d96c-439f-8bdb-a210566877d6%2C6f63b881-b63c-4c83-9179-167c5debba8b&show_page=first_page&utm_source=Facebook&utm_medium=0814-other3-vacation-25%2Bmale&utm_campaign=0814-copy-N08103-other3-vacation-25%2Bmale&utm_content=copy-N08103&utm_term=3N08103&fbclid=IwAR2hlEgS93KnJFdamKh8E16uUB2W2BEavblbQjZ485pUKbea1bC4QnD6HD0

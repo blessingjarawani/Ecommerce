@@ -82,6 +82,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
 
         }
        
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
