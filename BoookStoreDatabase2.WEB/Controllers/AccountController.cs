@@ -58,7 +58,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<Response<bool>>(content);
+                    var result = JsonConvert.DeserializeObject<ObjectResponse<bool>>(content);
                     if (!result.Success)
                     {
                         ModelState.AddModelError(string.Empty, result.Message);
@@ -80,7 +80,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
                     if (response.IsSuccessStatusCode)
                     {
                         var content = await response.Content.ReadAsStringAsync();
-                        var result = JsonConvert.DeserializeObject<Response<AuthenticateResponse>>(content);
+                        var result = JsonConvert.DeserializeObject<ObjectResponse<AuthenticateResponse>>(content);
                         if (!result.Success)
                         {
                             ModelState.AddModelError(string.Empty, "Invalid Login");
@@ -142,7 +142,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<Response<bool>>(content);
+                    var result = JsonConvert.DeserializeObject<ObjectResponse<bool>>(content);
                     if (!result.Success)
                     {
                         ModelState.AddModelError(string.Empty, result.Message);

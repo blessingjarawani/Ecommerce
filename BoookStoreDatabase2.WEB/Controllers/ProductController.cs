@@ -115,7 +115,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
                 var response = await _client.PostAsync("Product/CreateOrUpdate", new StringContent(JsonConvert.SerializeObject(product), Encoding.UTF8, "application/json"));
                 var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<Response<int>>(content);
+                var result = JsonConvert.DeserializeObject<ObjectResponse<int>>(content);
                 if (result.Success)
                 {
                     return RedirectToAction("details", new { id = result.Data });
@@ -133,7 +133,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
             var response = await _client.PostAsync($"Product/Details", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
             var content = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Response<ProductsDTO>>(content);
+            var result = JsonConvert.DeserializeObject<ObjectResponse<ProductsDTO>>(content);
             if (result.Success)
             {
                 return View(result.Data);
@@ -148,7 +148,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
             var response = await _client.PostAsync($"Product/GetProduct", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
             var content = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Response<ProductsDTO>>(content);
+            var result = JsonConvert.DeserializeObject<ObjectResponse<ProductsDTO>>(content);
             if (result.Success)
             {
                 var editProduct = new EditProductViewModel

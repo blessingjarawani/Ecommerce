@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Dictionary.Dictionary;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -27,7 +28,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<Response<bool>> AddToCart([FromBody] AddToCartCommand addToCartCommand)
+        public async Task<ObjectResponse<bool>> AddToCart([FromBody] AddToCartCommand addToCartCommand)
         {
 
             var product = await _productsService.GetProduct(addToCartCommand.ProductId);
@@ -44,9 +45,9 @@ namespace Ecommerce.Api.Controllers
 
         }
         [HttpPost("[action]")]
-        public async Task<Response<List<OrderLineDTO>>> Details([FromBody] ProductSearchDTO productSearch)
+        public async Task<ObjectResponse<List<OrderLineDTO>>> Details([FromBody] ProductSearchDTO productSearch)
         {
-            return await _cartService.GetCustomerCart(productSearch.Id.Value);
+            return await _cartService.GetCustomerCart(productSearch.Id.Value,CartStatus.InProgress);
         }
     }
 }

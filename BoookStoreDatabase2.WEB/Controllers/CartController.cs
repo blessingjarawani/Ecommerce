@@ -44,7 +44,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
                 var response = await _client.PostAsync($"Cart/AddToCart", new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
                 var content = await response.Content.ReadAsStringAsync();
-                var product = JsonConvert.DeserializeObject<Response<bool>>(content);
+                var product = JsonConvert.DeserializeObject<ObjectResponse<bool>>(content);
                 if (!product.Success)
                 {
                     ModelState.AddModelError(string.Empty, product.Message);
@@ -63,7 +63,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
             var response = await _client.PostAsync($"Cart/Details", new StringContent(JsonConvert.SerializeObject(new ProductSearchDTO { Id = int.Parse(userId) }), Encoding.UTF8, "application/json"));
             var content = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<Response<List<OrderLineDTO>>>(content);
+            var result = JsonConvert.DeserializeObject<ObjectResponse<List<OrderLineDTO>>>(content);
             if (!result.Success)
             {
                 ModelState.AddModelError(string.Empty, result.Message);

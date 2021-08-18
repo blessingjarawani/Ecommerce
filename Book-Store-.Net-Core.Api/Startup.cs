@@ -8,7 +8,10 @@ using BoookStoreDatabase2.DAL.Entities;
 using BoookStoreDatabase2.DAL.Mappers;
 using BoookStoreDatabase2.DAL.Repositories;
 using BoookStoreDatabase2.DAL.SeedData;
-using Microsoft.AspNetCore.Authentication.JwtBearer; 
+using Ecommerce.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
+using Ecommerce.BLL.Infrastructure.Shared.Services;
+using Ecommerce.DAL.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -58,7 +61,9 @@ namespace Book_Store_.Net_Core.Api
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
             services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<IProductsService, ProductsService>();
+            services.AddTransient<ICustomerOrderService, CustomerOrderService>();
             services.AddTransient<IApplicationUsersRepository, ApplicationUsersRepository>();
+            services.AddTransient<ICustomerOrderRepository, CustomerOrderRepository>();
             services.AddTransient<IApplicationUsersService, ApplicationUsersService>();
             services.AddTransient<ICartRepository, CartRepository>();
             services.AddTransient<ICartService, CartService>();
@@ -87,7 +92,7 @@ namespace Book_Store_.Net_Core.Api
                     ValidateAudience = false
                 };
             });
-           
+
         }
 
         public void ConfigureDatabase(IServiceCollection services)
@@ -119,7 +124,7 @@ namespace Book_Store_.Net_Core.Api
             app.UseAuthentication();
             app.UseAuthorization();
 
-           //DatabaseInitiliaser.SeedData(userManager, roleManager);
+            //DatabaseInitiliaser.SeedData(userManager, roleManager);
             app.UseMiddleware<JwtMiddleWare>();
             app.UseEndpoints(endpoints =>
             {

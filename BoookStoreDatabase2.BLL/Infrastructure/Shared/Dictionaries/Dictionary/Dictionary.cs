@@ -9,8 +9,9 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Dictionary
     {
         public enum CartStatus
         {
-            Inprogress = 0,
-            Proccessed = 1
+            InProgress = 0,
+            InOrderingProcess = 1,
+            Processed = 2,
         }
 
         public enum ProductType

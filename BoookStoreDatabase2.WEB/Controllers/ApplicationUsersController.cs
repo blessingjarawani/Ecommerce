@@ -32,7 +32,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
             var response = await _client.GetAsync($"ApplicationUsers/GetUsers");
             var content = await response.Content.ReadAsStringAsync();
-            var users = JsonConvert.DeserializeObject<Response<List<ApplicationUsersDTO>>>(content);
+            var users = JsonConvert.DeserializeObject<ObjectResponse<List<ApplicationUsersDTO>>>(content);
             if (!users.Success)
             {
                 ModelState.AddModelError(string.Empty, users.Message);

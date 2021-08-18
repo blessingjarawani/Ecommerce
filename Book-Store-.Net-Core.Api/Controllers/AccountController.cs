@@ -24,15 +24,15 @@ namespace Ecommerce.Api.Controllers
             _applicationUsersService = applicationUsersService;
         }
         [HttpPost("[action]")]
-        public async Task<Response<AuthenticateResponse>> Login([FromBody] LoginViewModel loginViewModel)
+        public async Task<ObjectResponse<AuthenticateResponse>> Login([FromBody] LoginViewModel loginViewModel)
         => await _applicationUsersService.Authenticate(loginViewModel);
 
         [HttpPost("[action]")]
-        public async Task<Response<bool>> Register([FromBody] RegisterUserViewModel request)
+        public async Task<ObjectResponse<bool>> Register([FromBody] RegisterUserViewModel request)
         => await _applicationUsersService.Register(request);
 
         [HttpPost("[action]")]
-        public async Task<Response<bool>> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
+        public async Task<ObjectResponse<bool>> ChangePassword(ChangePasswordViewModel changePasswordViewModel)
             => await _applicationUsersService.ChangePassword(changePasswordViewModel);
     }
 }

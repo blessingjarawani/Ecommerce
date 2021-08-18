@@ -1,4 +1,5 @@
 ﻿using BoookStoreDatabase2.DAL.Entities;
+using Ecommerce.DAL.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -15,6 +16,7 @@ namespace BoookStoreDatabase2.DAL.Context
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<CustomerOrder> CustomerOrders { get; set; }
         public DbSet<Administrator> Employees { get; set; }
         public DbSet<OrderLines> OrderLines { get; set; }
         public StoreContext(DbContextOptions<StoreContext> options) : base(options)

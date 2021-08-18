@@ -20,26 +20,30 @@ namespace BoookStoreDatabase2.DAL.Repositories
 
         }
 
-        public async Task<List<OrderLineDTO>> GetCustomerOrder(int customerId)
+        public async Task<List<OrderLineDTO>> GetCustomerOrder(int? customerId, CartStatus cartStatus)
         {
-            var result = await Task.Run(() => _dbContext.OrderLines.Include(x => x.Product)
-             .Where(x => x.CustomerId == customerId && x.IsActive)
-             .AsEnumerable()
-             .GroupBy(x => new { x.CustomerId, x.ProductId})
+            var query = _dbContext.OrderLines.Include(x => x.Product)
+             .Where(x => x.IsActive && x.CartStatus == cartStatus);
+            if (customerId.HasValue)
+            {
+                query = query.Where(x => x.CustomerId == customerId.Value);
+            }
+            var result = (await query.ToListAsync())
+             .GroupBy(x => new { x.CustomerId, x.ProductId })
                         .Select(fl => new OrderLineDTO
                         {
-                            CustomerId = customerId,
-                            Products = fl.Select(y=>
+                            CustomerId = fl.Key.CustomerId,
+                            Products = fl.Select(y =>
                             new ProductsDTO
                             {
                                 Id = fl.Key.ProductId,
-                                Quantity = fl.Sum(x=>x.Quantity),
-                                Name =y.Product.Name,
+                                Quantity = fl.Sum(x => x.Quantity),
+                                Name = y.Product.Name,
                                 Price = fl.Sum(t => t.Price * t.Quantity),
                                 ProductType = y.Product.ProductType
                             }).ToList()
-                        })
-            );
+                        });
+
             return result?.ToList();
         }
 
@@ -53,13 +57,28 @@ namespace BoookStoreDatabase2.DAL.Repositories
                 CustomerId = cartCommand.CustomerId,
                 Quantity = cartCommand.Quantity,
                 Price = cartCommand.Product.Price,
-                CartStatus = CartStatus.Inprogress,
+                CartStatus = CartStatus.InProgress,
                 ProductId = cartCommand.Product.Id
             };
             await _dbContext.OrderLines.AddAsync(orderLine);
             return await SaveChangesAsync();
         }
 
+        public async Task<bool> UpdateCustomerOrderLine(int customerId, CartStatus currentStatus, CartStatus newStatus)
+        {
+            var result = await _dbContext.OrderLines.Where(t => t.CustomerId == customerId && t.CartStatus == currentStatus && t.IsActive).ToListAsync();
+            if (result.Any())
+            {
+                result.ForEach(t =>
+                {
+                    t.CartStatus = newStatus;
+                });
+
+                return await SaveChangesAsync();
+            }
+            return false;
+
+        }
         private int GenerateId() =>
           _dbContext.OrderLines.OrderByDescending(x => x.Id).FirstOrDefault()?.Id + 1 ?? 1;
     }

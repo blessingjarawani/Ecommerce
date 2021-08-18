@@ -9,8 +9,8 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces
 {
    public interface IProductsService
     {
-        Task<Response<int>> CreateOrUpdateProduct(ProductsDTO productsDTO);
-        Task<Response<List<ProductsDTO>>> GetProducts(string productType = null);
-        Task<Response<ProductsDTO>> GetProduct(int id);
+        Task<ObjectResponse<int>> CreateOrUpdateProduct(ProductsDTO productsDTO);
+        Task<ObjectResponse<List<ProductsDTO>>> GetProducts(string productType = null);
+        Task<ObjectResponse<ProductsDTO>> GetProduct(int id);
     }
 }

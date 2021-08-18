@@ -46,7 +46,7 @@ namespace Ecommerce.Api.Controllers
             return result.Data;
         }
         [HttpPost("[action]")]
-        public async Task<Response<int>> CreateOrUpdate([FromBody] ProductsDTO model)
+        public async Task<ObjectResponse<int>> CreateOrUpdate([FromBody] ProductsDTO model)
         {
 
             return await _productsService.CreateOrUpdateProduct(model);
@@ -55,12 +55,12 @@ namespace Ecommerce.Api.Controllers
 
 
         [HttpPost("[action]")]
-        public async Task<Response<ProductsDTO>> Details([FromBody]ProductSearchDTO dto) =>
+        public async Task<ObjectResponse<ProductsDTO>> Details([FromBody]ProductSearchDTO dto) =>
         await _productsService.GetProduct(dto.Id.Value);
 
         [HttpPost("[action]")]
 
-        public async Task<Response<ProductsDTO>> GetProduct([FromBody]ProductSearchDTO dto) =>
+        public async Task<ObjectResponse<ProductsDTO>> GetProduct([FromBody]ProductSearchDTO dto) =>
         await _productsService.GetProduct(dto.Id.Value);
 
     }

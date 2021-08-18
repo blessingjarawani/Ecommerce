@@ -12,10 +12,10 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces
 {
     public interface IApplicationUsersService
     {
-        Task<Response<List<ApplicationUsersDTO>>> GetAllUsers();
-        Task<Response<AuthenticateResponse>> Authenticate(LoginViewModel request);
-        Task<Response<bool>> Register(RegisterUserViewModel request);
+        Task<ObjectResponse<List<ApplicationUsersDTO>>> GetAllUsers();
+        Task<ObjectResponse<AuthenticateResponse>> Authenticate(LoginViewModel request);
+        Task<ObjectResponse<bool>> Register(RegisterUserViewModel request);
         Task LockOutUser(string userId);
-        Task<Response<bool>> ChangePassword(ChangePasswordViewModel changePasswordViewModel);
+        Task<ObjectResponse<bool>> ChangePassword(ChangePasswordViewModel changePasswordViewModel);
     }
 }

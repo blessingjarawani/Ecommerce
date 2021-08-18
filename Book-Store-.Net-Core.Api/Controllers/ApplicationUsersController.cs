@@ -24,7 +24,7 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpGet("[action]")]
-        public async Task<Response<List<ApplicationUsersDTO>>> GetUsers()
+        public async Task<ObjectResponse<List<ApplicationUsersDTO>>> GetUsers()
         {
             return await _applicationUsersService.GetAllUsers();
         }
