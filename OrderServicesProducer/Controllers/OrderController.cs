@@ -28,7 +28,7 @@ namespace OrderServicesProducer.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<BaseResponse> CheckOutCustomerOrderLine(UpdateCustomerOrderLineCommand command)
+        public async Task<BaseResponse> CheckOutCustomerOrderLine([FromBody] UpdateCustomerOrderLineCommand command)
         {
             command.NewStatus = CartStatus.InOrderingProcess;
             var updateResult = await _cartService.UpdateCustomerOrderLine(command);

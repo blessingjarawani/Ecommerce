@@ -46,6 +46,7 @@
                             </td>
                         </tr>
                     }
+
                 }
                 else
                 {
@@ -57,6 +58,14 @@
                 }
             </tbody>
         </table>
+        @if (Model != null && Model?.Count > 0)
+        {
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <a asp-controller="Cart" asp-action="CheckOut" class="btn btn-success m-1">CheckOut</a>
+                </div>
+            </div>
+        }
     </div>
 </div>
 

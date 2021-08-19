@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using static BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Dictionary.Dictionary;
 
@@ -24,9 +25,10 @@ namespace BoookStoreDatabase2.WEB.Controllers
     [Authorize(Roles = "Customer")]
     public class CartController : BaseController
     {
-        public CartController(IECommerceHttpClient httpClient) : base(httpClient)
+        private readonly IConfiguration _configuration;
+        public CartController(IECommerceHttpClient httpClient, IConfiguration configuration) : base(httpClient)
         {
-
+            _configuration = configuration;
         }
 
         public async Task<IActionResult> AddToCart(int id, int quantity)
@@ -70,6 +72,27 @@ namespace BoookStoreDatabase2.WEB.Controllers
                 return View();
             }
             return View(result.Data);
+        }
+
+        public async Task<IActionResult> CheckOut()
+        {
+            var userId = await GetUserId();
+            var command = new UpdateCustomerOrderLineCommand
+            {
+                CustomerId = int.Parse(userId),
+                CurrentStatus = CartStatus.InProgress,
+                NewStatus = CartStatus.InOrderingProcess
+            };
+            _client.BaseAddress = new Uri(_configuration["Api:OrderUrl"]);
+            var response = await _client.PostAsync($"Order/CheckOutCustomerOrderLine", new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<BaseResponse>(content);
+            if (!result.Success)
+            {
+                ModelState.AddModelError(string.Empty, result.Message);
+                return View();
+            }
+            return RedirectToAction("Details");
         }
     }
 
