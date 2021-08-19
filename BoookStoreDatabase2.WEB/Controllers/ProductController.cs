@@ -55,7 +55,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
 
         }
 
-
+        [HttpGet]
         public async Task<IActionResult> Books(bool? price = null, bool? name = null)
         {
             try
@@ -127,7 +127,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
         }
 
 
-    
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
@@ -142,8 +142,8 @@ namespace BoookStoreDatabase2.WEB.Controllers
             return View();
         }
 
-       
-        public async Task<IActionResult> GetProduct(int id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
         {
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
             var response = await _client.PostAsync($"Product/GetProduct", new StringContent(JsonConvert.SerializeObject(new { id }), Encoding.UTF8, "application/json"));
