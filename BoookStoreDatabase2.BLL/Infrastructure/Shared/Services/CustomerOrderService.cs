@@ -45,7 +45,7 @@ namespace Ecommerce.BLL.Infrastructure.Shared.Services
         {
             try
             {
-                var result = await _cartRepository.GetCustomerOrder(customerId : null, CartStatus.InProgress);
+                var result = await _cartRepository.GetCustomerOrder(customerId: null, CartStatus.InProgress);
                 return new ObjectResponse<List<OrderLineDTO>> { Success = true, Data = result };
             }
             catch (Exception ex)
@@ -55,5 +55,18 @@ namespace Ecommerce.BLL.Infrastructure.Shared.Services
             }
         }
 
+        public async Task<ObjectResponse<IEnumerable<CustomerOrderSummaryDTO>>> GetCustomerOrderHistory(int customerId)
+        {
+            try
+            {
+                var result = await _repo.GetOrderHistory(customerId);
+                return new ObjectResponse<IEnumerable<CustomerOrderSummaryDTO>> { Success = true, Data = result };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.GetBaseException().Message);
+                return new ObjectResponse<IEnumerable<CustomerOrderSummaryDTO>> { Success = false, Message = ex.GetBaseException().Message };
+            }
+        }
     }
 }

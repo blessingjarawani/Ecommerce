@@ -1,0 +1,38 @@
+﻿<div class="panel-body">
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr class="accordion-toggle" data-toggle="collapse" data-target="#AA_@(item.Id)">
+            <td>
+                <button class="bb" type="button">
+                    @Html.Raw(item.H)
+                </button>
+            </td>
+            <td>
+                @Html.Raw(item.E)
+            </td>
+        </tr>
+
+
+        <tr>
+            <td class="hiddenRow">
+                <div class="accordian-body collapse" id="AA_@(item.Id)">
+                    <table>
+                        <tr>
+                            <td>
+                                @Html.Raw(item.D)
+                            </td>
+
+                            <td>
+                                @Html.Raw(item.B)
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+
+    }
+</table>
+
+</div>

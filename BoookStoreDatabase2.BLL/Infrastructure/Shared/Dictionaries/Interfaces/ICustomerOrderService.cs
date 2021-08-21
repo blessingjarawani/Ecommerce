@@ -10,5 +10,6 @@ namespace Ecommerce.BLL.Infrastructure.Shared.Dictionaries.Interfaces
     public interface ICustomerOrderService
     {
         Task<BaseResponse> CreateOrder(CustomerOrderDTO customerOrder);
+        Task<ObjectResponse<IEnumerable<CustomerOrderSummaryDTO>>> GetCustomerOrderHistory(int customerId);
     }
 }

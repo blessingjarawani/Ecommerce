@@ -10,7 +10,7 @@ namespace BoookStoreDatabase2.DAL.Entities.Abstracts
     {
         [Key]
         public int Id { get; set; }
-        public DateTime DateCreated { get; set; }
+        public DateTime DateCreated { get; set; } = DateTime.Now;
         public DateTime UpdatedDate { get; set; }
         public bool IsActive { get; set; }
     }

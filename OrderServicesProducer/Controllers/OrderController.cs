@@ -1,5 +1,6 @@
 ﻿using BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
 using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
+using Ecommerce.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
 using Ecommerce.BLL.Models.DTO;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,14 @@ namespace OrderServicesProducer.Controllers
         private readonly ICartService _cartService;
         private readonly IBusControl _bus;
         private readonly IConfiguration _config;
+        private readonly ICustomerOrderService _orderService;
 
-        public OrderController(ICartService cartService, IBusControl bus, IConfiguration config)
+        public OrderController(ICartService cartService, IBusControl bus, IConfiguration config, ICustomerOrderService orderService)
         {
             _cartService = cartService;
             _bus = bus;
             _config = config;
+            _orderService = orderService;
         }
 
         [HttpPost("[action]")]
@@ -41,5 +44,9 @@ namespace OrderServicesProducer.Controllers
             await endPoint.Send(orderLinesResult);
             return new BaseResponse { Success = orderLinesResult.Success }; ;
         }
+
+        [HttpPost("[action]")]
+        public async Task<BaseResponse> CheckOutCustomerOrderLine([FromBody] GetCustomerOrderCommand command)
+            => await _orderService.GetCustomerOrderHistory(command.CustomerId);
     }
 }

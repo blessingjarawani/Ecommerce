@@ -73,3 +73,6 @@ body {
     height: 200px;
     width: auto;
 }
+.hiddenRow {
+    padding: 0 !important;
+}

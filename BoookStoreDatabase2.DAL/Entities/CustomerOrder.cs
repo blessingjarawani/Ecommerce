@@ -1,4 +1,5 @@
-﻿using BoookStoreDatabase2.DAL.Entities.Abstracts;
+﻿using BoookStoreDatabase2.DAL.Entities;
+using BoookStoreDatabase2.DAL.Entities.Abstracts;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -21,5 +22,8 @@ namespace Ecommerce.DAL.Entities
         public int Quantity { get; set; }
         [Required]
         public decimal Amount { get; set; }
+
+        public virtual Product Product { get; set; }
+        public virtual Customer Customer { get; set; }
     }
 }
