@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "Product Details";
-    var photoPath = "~/images/" + (Model.ImagePath ?? "noimage.jpg");
+    var photoPath = "~/images/" + (!string.IsNullOrWhiteSpace(Model.ImagePath) ? Model.ImagePath : "noimage.png");
 }
 
 <div class="row justify-content-center m-3">
@@ -21,7 +21,7 @@
                 <h4>Type : @Model.ProductType.ToString()</h4>
             </div>
             <div class="card-footer text-center">
-                <a asp-controller="product" asp-action="index" class="btn btn-primary">Back</a>
+                <a asp-controller="product" asp-action="books" class="btn btn-primary">Back</a>
                 @if (User.IsInRole("Customer"))
                 {
                 <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.Id" class="btn btn-success">Add to Cart</a>

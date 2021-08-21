@@ -14,14 +14,16 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
     public class CartService : ICartService
     {
         private ICartRepository _cartRepository { get; }
-
+        private readonly IProductsRepository _productsRepository;
         private readonly ILogger<CartService> _logger;
 
-        public CartService(ICartRepository cartRepository, ILogger<CartService> logger)
+        public CartService(ICartRepository cartRepository, IProductsRepository productsRepository, ILogger<CartService> logger)
         {
             _cartRepository = cartRepository;
+            _productsRepository = productsRepository;
             _logger = logger;
         }
+
         public async Task<ObjectResponse<bool>> AddToCart(AddToCartCommand addToCartCommand)
         {
             try
@@ -30,8 +32,14 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
                 {
                     return new ObjectResponse<bool> { Success = false, Message = "Invalid Object" };
                 }
+
                 var result = await _cartRepository.AddToCart(addToCartCommand);
-                return result ? new ObjectResponse<bool> { Success = true, Data = result } : new ObjectResponse<bool> { Success = false, Message = "Invalid Object" };
+                if (result)
+                {
+                    await _productsRepository.UpdateProductQuantity(addToCartCommand.Product.Id, addToCartCommand.Quantity);
+                    return new ObjectResponse<bool> { Success = true, Data = result };
+                }
+                return new  ObjectResponse<bool> { Success = false, Message = "DB Save Error" };
 
             }
             catch (Exception ex)

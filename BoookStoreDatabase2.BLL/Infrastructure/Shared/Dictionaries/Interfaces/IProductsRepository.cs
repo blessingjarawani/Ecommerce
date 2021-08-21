@@ -11,5 +11,6 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Dictionaries.Interfaces
         Task<List<ProductsDTO>> GetProducts(string productType = null);
         Task<int> AddOrUpdate(ProductsDTO productsDTO);
         Task<ProductsDTO> GetProduct(int id);
+        Task<bool> UpdateProductQuantity(int id, int quantity);
     }
 }

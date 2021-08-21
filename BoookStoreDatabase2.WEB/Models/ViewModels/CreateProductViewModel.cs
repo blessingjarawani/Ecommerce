@@ -21,5 +21,7 @@ namespace BoookStoreDatabase2.WEB.Models.ViewModels
         public double Price { get; set; }
         [Required]
         public ProductType ProductType { get; set; }
+
+        public string ExistingPhotoPath { get; set; }
     }
 }

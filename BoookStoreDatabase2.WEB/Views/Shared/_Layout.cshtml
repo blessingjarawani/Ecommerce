@@ -71,16 +71,37 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script type="text/javascript">
-        function changeValue(target, output, total, num) {
+        function changeValue(target, output, total, num, inStock) {
             let val = parseInt(target.value);
             if (num < 0 && val <= 1) {
                 return;
             }
-            val += num;
-            target.value = val;
 
-            let totalInt = val * parseFloat(total.substring(1));
-            output.val((totalInt).substring(0, 6));
+            val += num;
+            if (val > inStock) { val = inStock };
+            target.value = val;
+            let totalInt = val * parseFloat(total);
+            output.value=(totalInt);
+        };
+
+        function addToCart(target, id)
+        {
+            let qnty = (target.value);
+
+            var data = JSON.stringify({
+                'id': id,
+                'quantity': qnty
+            });
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddToCart", "Cart")',
+                data: data,
+                contentType: "application/json",
+                success: function (r) {
+                  window.location.href = "@Url.Action("Details", "Cart")";
+                }
+            });
+
         }
     </script>
     @RenderSection("Scripts", required: false)

@@ -12,6 +12,7 @@ using BoookStoreDatabase2.DAL.Entities;
 using BoookStoreDatabase2.WEB.Models.ViewModels;
 using Ecommerce.BLL.Models.DTO;
 using ECommerce.WEB.EcommerceHttpClient;
+using ECommerce.WEB.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -31,16 +32,17 @@ namespace BoookStoreDatabase2.WEB.Controllers
             _configuration = configuration;
         }
 
-        public async Task<IActionResult> AddToCart(int id, int quantity)
+
+        public async Task<IActionResult> AddToCart([FromBody] AddToCart cart)
         {
-            if (ModelState.IsValid && id > 0)
+            if (ModelState.IsValid)
             {
                 var userId = await GetUserId();
                 var command = new AddToCartCommand
                 {
                     CustomerId = int.Parse(userId),
-                    ProductId = id,
-                    Quantity = quantity
+                    ProductId =(cart.Id),
+                    Quantity =(cart.Quantity)
 
                 };
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());

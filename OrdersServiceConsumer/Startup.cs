@@ -58,6 +58,7 @@ namespace OrdersServiceConsumer
             });
 
             ConfigureDatabase(services);
+            services.AddTransient<IProductsRepository, ProductsRepository>();
             services.AddTransient<ICustomerOrderService, CustomerOrderService>();
             services.AddTransient<ICustomerOrderRepository, CustomerOrderRepository>();
             services.AddTransient<ICartRepository, CartRepository>();

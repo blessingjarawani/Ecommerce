@@ -16,6 +16,7 @@ namespace BoookStoreDatabase2.BLL.Models.DTO
         public ProductType ProductType { get; set; }
         public int Amount { get; set; } = 1;
         public double Total => (Price * Amount);
+        public string ExistingPhotoPath { get; set; }
         public bool IsValid =>
          !string.IsNullOrWhiteSpace(Name) &&
           Price > 0 && Quantity > 0;

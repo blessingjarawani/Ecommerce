@@ -43,6 +43,7 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             try
             {
                 var result = await _productsRepository.GetProduct(id);
+              
                 return new ObjectResponse<ProductsDTO> { Success = true, Data = result };
             }
             catch (Exception ex)
@@ -52,6 +53,8 @@ namespace BoookStoreDatabase2.BLL.Infrastructure.Shared.Services
             }
 
         }
+
+
 
         public async Task<ObjectResponse<int>> CreateOrUpdateProduct(ProductsDTO productsDTO)
         {

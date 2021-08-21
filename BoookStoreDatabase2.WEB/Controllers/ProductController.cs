@@ -33,13 +33,12 @@ namespace BoookStoreDatabase2.WEB.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index(bool? price = null, bool? name = null)
         {
             try
             {
                 _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
-                var response = await _client.PostAsync("http://localhost:45447/api/Product/GetProducts", new StringContent(JsonConvert.SerializeObject(new { price, name }), Encoding.UTF8, "application/json"));
+                var response = await _client.PostAsync($"Product/GetProducts", new StringContent(JsonConvert.SerializeObject(new { price, name }), Encoding.UTF8, "application/json"));
                 var content = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<ProductsDTO>>(content);
                 return View(result);
@@ -108,7 +107,8 @@ namespace BoookStoreDatabase2.WEB.Controllers
                     ImagePath = uniqueFileName,
                     ProductType = model.ProductType,
                     Price = model.Price,
-                    Quantity = model.Quantity
+                    Quantity = model.Quantity,
+                    ExistingPhotoPath = model.ExistingPhotoPath
                 };
 
 
