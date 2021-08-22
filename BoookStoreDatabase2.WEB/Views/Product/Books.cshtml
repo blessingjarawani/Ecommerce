@@ -37,7 +37,7 @@
                    class="btn btn-primary m-1">View</a>
                 @if (User.IsInRole("Customer"))
                 {
-                    <a onclick="addToCart(document.getElementById('amount-input-@product.Id.ToString()'), @product.Id, @product.Quantity)" class="btn btn-success m-1">Add to Cart</a>
+                    <a onclick="addToCart(document.getElementById('amount-input-@product.Id.ToString()'), @product.Id, @product.Quantity,@product.Quantity)" class="btn btn-success m-1">Add to Cart</a>
                 }
 
                 else

@@ -2,6 +2,7 @@
 using BoookStoreDatabase2.BLL.Infrastructure.Shared.Responses;
 using BoookStoreDatabase2.BLL.Models.DTO;
 using BoookStoreDatabase2.DAL.Entities;
+using Ecommerce.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
 using Ecommerce.BLL.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -20,11 +21,14 @@ namespace Ecommerce.Api.Controllers
     {
         public ICartService _cartService { get; }
         public IProductsService _productsService { get; }
+        private readonly ICustomerOrderService _orderService;
 
-        public CartController(IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager, ICartService cartService, IProductsService productsService) : base(httpContextAccessor, userManager)
+        public CartController(ICartService cartService, IProductsService productsService, ICustomerOrderService orderService, IHttpContextAccessor httpContextAccessor, UserManager<ApplicationUser> userManager)
+            : base(httpContextAccessor, userManager)
         {
             _cartService = cartService;
             _productsService = productsService;
+            _orderService = orderService;
         }
 
         [HttpPost("[action]")]
@@ -39,7 +43,7 @@ namespace Ecommerce.Api.Controllers
             {
                 CustomerId = addToCartCommand.CustomerId,
                 Product = product.Data,
-                Quantity =addToCartCommand.Quantity
+                Quantity = addToCartCommand.Quantity
             };
             return await _cartService.AddToCart(command);
 
@@ -47,7 +51,11 @@ namespace Ecommerce.Api.Controllers
         [HttpPost("[action]")]
         public async Task<ObjectResponse<List<OrderLineDTO>>> Details([FromBody] ProductSearchDTO productSearch)
         {
-            return await _cartService.GetCustomerCart(productSearch.Id.Value,CartStatus.InProgress);
+            return await _cartService.GetCustomerCart(productSearch.Id.Value, CartStatus.InProgress);
         }
+
+        [HttpPost("[action]")]
+        public async Task<ObjectResponse<IEnumerable<CustomerOrderSummaryDTO>>> GetPurchaseHistory([FromBody] GetCustomerOrderCommand command)
+        => await _orderService.GetCustomerOrderHistory(command.CustomerId);
     }
 }

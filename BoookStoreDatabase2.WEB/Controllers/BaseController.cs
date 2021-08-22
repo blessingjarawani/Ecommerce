@@ -39,5 +39,10 @@ namespace BoookStoreDatabase2.WEB.Controllers
             var userId = HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier).Value;
             return userId;
         }
+        public async Task<string> GetUserEmail()
+        {
+            var email = HttpContext.User?.FindFirst(ClaimTypes.Email).Value;
+            return email;
+        }
     }
 }

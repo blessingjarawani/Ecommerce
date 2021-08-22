@@ -1,38 +1,101 @@
-﻿<div class="panel-body">
-<table class="table">
-    @foreach (var item in Model)
-    {
-        <tr class="accordion-toggle" data-toggle="collapse" data-target="#AA_@(item.Id)">
-            <td>
-                <button class="bb" type="button">
-                    @Html.Raw(item.H)
-                </button>
-            </td>
-            <td>
-                @Html.Raw(item.E)
-            </td>
-        </tr>
+﻿@using Ecommerce.BLL.Models.DTO;
+@model List<CustomerOrderSummaryDTO>
+@{
+    ViewData["Title"] = "Purchase History";
+}
+<!DOCTYPE html>
 
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            font-size: 10pt;
+        }
 
+        .Grid {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+            background-color: #fff;
+        }
+
+            .Grid th {
+                background-color: #B8DBFD;
+                color: #333;
+                font-weight: bold;
+            }
+
+            .Grid th, .Grid td {
+                padding: 5px;
+                border: 1px solid #ccc;
+            }
+
+            .Grid img {
+                cursor: pointer;
+            }
+
+        .ChildGrid {
+            width: 100%;
+        }
+
+            .ChildGrid th {
+                background-color: #6C6C6C;
+                color: #fff;
+                font-weight: bold;
+            }
+    </style>
+</head>
+<body>
+    <table cellpadding="0" cellspacing="0" class="Grid">
         <tr>
-            <td class="hiddenRow">
-                <div class="accordian-body collapse" id="AA_@(item.Id)">
-                    <table>
-                        <tr>
-                            <td>
-                                @Html.Raw(item.D)
-                            </td>
-
-                            <td>
-                                @Html.Raw(item.B)
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
+            <th></th>
+            <th>Order number</th>
+            <th>Date</th>
+            <th>Total Amount</th>
         </tr>
-
-    }
-</table>
-
-</div>
+        @foreach (var order in Model)
+        {
+    <tr>
+        <td>
+            <img src="~/images/plus.png" />
+            <div style="display:none">
+                <table cellpadding="0" cellspacing="0" class="ChildGrid">
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Total Amount</th>
+                    </tr>
+                    @foreach (var product in order.Products)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.Quantity</td>
+                            <td>@product.Amount</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </td>
+        <td>@order.OrderNumber.Substring(0,6)</td>
+        <td>@order.OrderDate.ToShortDateString()</td>
+        <td>@order.TotalAmount</td>
+    </tr>
+        }
+    </table>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+        //Assign Click event to Plus Image.
+        $("body").on("click", "img[src*='plus.png']", function () {
+            $(this).closest("tr").after("<tr><td></td><td colspan = '999'>" + $(this).next().html() + "</td></tr>");
+            $(this).attr("src", "/images/minus.png");
+        });
+        //Assign Click event to Minus Image.
+        $("body").on("click", "img[src*='minus.png']", function () {
+            $(this).attr("src", "/images/plus.png");
+            $(this).closest("tr").next().remove();
+        });
+    </script>
+</body>
+</html>

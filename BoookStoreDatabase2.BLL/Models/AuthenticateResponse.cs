@@ -21,6 +21,8 @@ namespace BoookStoreDatabase2.BLL.Models
         public string Token { get; private set; }
         [JsonProperty("userRole")]
         public Roles UserRole { get; private set; }
+        [JsonProperty("email")]
+        public string Email { get; private set; }
         public AuthenticateResponse()
         {
         }
@@ -32,6 +34,7 @@ namespace BoookStoreDatabase2.BLL.Models
             UserName = user.UserName;
             Token = token;
             UserRole = user.UserRole;
+            Email = user.Email;
         }
 
     }

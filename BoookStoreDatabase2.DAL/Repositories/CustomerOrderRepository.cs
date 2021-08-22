@@ -43,7 +43,8 @@ namespace Ecommerce.DAL.Repositories
                              OrderNumber = t.Key.OrderNumber,
                              OrderDate = t.Key.Date,
                              TotalAmount = t.Sum(x => x.Amount),
-                             Products = t.Select(x => new OrderProducts
+                             Products = t.Where(z=>z.OrderNumber == t.Key.OrderNumber)
+                             .Select(x => new OrderProducts
                              {
                                  Amount = x.Amount,
                                  Name = x.Product.Name,

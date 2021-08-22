@@ -90,7 +90,8 @@ namespace BoookStoreDatabase2.WEB.Controllers
                         var claims = new List<Claim>() {
                         new Claim(ClaimTypes.NameIdentifier, Convert.ToString(result.Data.UserId)),
                         new Claim(ClaimTypes.Name, result.Data.UserName),
-                        new Claim(ClaimTypes.Role, result.Data.UserRole.ToString())
+                        new Claim(ClaimTypes.Role, result.Data.UserRole.ToString()),
+                        new Claim(ClaimTypes.Email, result.Data.Email)
                         };
                         //Initialize a new instance of the ClaimsIdentity with the claims and authentication scheme    
                         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

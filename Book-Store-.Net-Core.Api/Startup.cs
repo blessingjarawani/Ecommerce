@@ -10,6 +10,7 @@ using BoookStoreDatabase2.DAL.Repositories;
 using BoookStoreDatabase2.DAL.SeedData;
 using Ecommerce.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
 using Ecommerce.BLL.Infrastructure.Shared.Services;
+using Ecommerce.BLL.Infrastructure.Shared.Services.Email;
 using Ecommerce.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -71,6 +72,11 @@ namespace Book_Store_.Net_Core.Api
             services.AddHttpContextAccessor();
             services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>(),
                              AppDomain.CurrentDomain.GetAssemblies());
+            var emailConfig = Configuration
+               .GetSection("EmailSenderConfig")
+               .Get<EmailSenderConfig>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IMailService, MailService>();
             services.AddControllers();
             AddSwagger(services);
             var authConfig = new AppSettings();

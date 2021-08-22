@@ -6,6 +6,7 @@ using BoookStoreDatabase2.DAL.Mappers;
 using BoookStoreDatabase2.DAL.Repositories;
 using Ecommerce.BLL.Infrastructure.Shared.Dictionaries.Interfaces;
 using Ecommerce.BLL.Infrastructure.Shared.Services;
+using Ecommerce.BLL.Infrastructure.Shared.Services.Email;
 using Ecommerce.DAL.Repositories;
 using GreenPipes;
 using MassTransit;
@@ -65,7 +66,11 @@ namespace OrdersServiceConsumer
             services.AddTransient<ICartService, CartService>();
             services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>(),
                             AppDomain.CurrentDomain.GetAssemblies());
-
+            var emailConfig = Configuration
+                .GetSection("EmailSenderConfig")
+                .Get<EmailSenderConfig>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IMailService, MailService>();
             services.AddMassTransitHostedService();
 
             services.AddControllers();

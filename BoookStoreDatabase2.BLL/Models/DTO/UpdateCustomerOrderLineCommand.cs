@@ -10,5 +10,6 @@ namespace Ecommerce.BLL.Models.DTO
         public int CustomerId { get; set; }
         public CartStatus CurrentStatus { get; set; }
         public CartStatus NewStatus { get; set; }
+        public string UserEmail { get; set; }
     }
 }

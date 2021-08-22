@@ -64,6 +64,7 @@ namespace BoookStoreDatabase2.WEB.Controllers
         public async Task<IActionResult> Details()
         {
             var userId = await GetUserId();
+           
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
             var response = await _client.PostAsync($"Cart/Details", new StringContent(JsonConvert.SerializeObject(new ProductSearchDTO { Id = int.Parse(userId) }), Encoding.UTF8, "application/json"));
             var content = await response.Content.ReadAsStringAsync();
@@ -79,11 +80,13 @@ namespace BoookStoreDatabase2.WEB.Controllers
         public async Task<IActionResult> CheckOut()
         {
             var userId = await GetUserId();
+            var userEmail = await GetUserEmail();
             var command = new UpdateCustomerOrderLineCommand
             {
                 CustomerId = int.Parse(userId),
                 CurrentStatus = CartStatus.InProgress,
-                NewStatus = CartStatus.InOrderingProcess
+                NewStatus = CartStatus.InOrderingProcess,
+                UserEmail = userEmail
             };
             _client.BaseAddress = new Uri(_configuration["Api:OrderUrl"]);
             var response = await _client.PostAsync($"Order/CheckOutCustomerOrderLine", new StringContent(JsonConvert.SerializeObject(command), Encoding.UTF8, "application/json"));
@@ -96,6 +99,23 @@ namespace BoookStoreDatabase2.WEB.Controllers
             }
             return RedirectToAction("Details");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> CartHistory()
+        {
+            var userId = await GetUserId();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", GetToken());
+            var response = await _client.PostAsync($"Cart/GetPurchaseHistory", new StringContent(JsonConvert.SerializeObject(new GetCustomerOrderCommand { CustomerId = int.Parse(userId) }), Encoding.UTF8, "application/json"));
+            var content = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ObjectResponse<IEnumerable<CustomerOrderSummaryDTO>>> (content);
+            if (!result.Success)
+            {
+                ModelState.AddModelError(string.Empty, result.Message);
+                return View();
+            }
+            return View(result.Data);
+        }
+
     }
 
 }

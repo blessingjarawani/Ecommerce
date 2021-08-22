@@ -26,30 +26,33 @@
                     <partial name="_LoginPartial" />
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <ul class="navbar-nav flex-grow-1">
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            @if (User.IsInRole("Customer"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Books">Store</a>
-                                </li>
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    @if (User.IsInRole("Customer"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Books">Store</a>
+                        </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Details">Cart</a>
-                                </li>
-                            }
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Store Directory</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUsers" asp-action="Index">Users</a>
-                                </li>
-                            }
-                        </ul>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Details">Cart</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="CartHistory">Purchase History</a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Store Directory</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUsers" asp-action="Index">Users</a>
+                        </li>
+                    }
+                </ul>
                     }
                 </div>
             </div>
@@ -84,10 +87,14 @@
             output.value=(totalInt);
         };
 
-        function addToCart(target, id)
+        function addToCart(target, id, inStock)
         {
             let qnty = (target.value);
-
+            if (qnty > inStock)
+            {
+                alert("You Exceed Items In Stock !!!");
+                return;
+            }
             var data = JSON.stringify({
                 'id': id,
                 'quantity': qnty

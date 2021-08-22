@@ -8,6 +8,7 @@ namespace BoookStoreDatabase2.BLL.Models.DTO
     {
         public List<ProductsDTO> Products { get; set; }
         public int CustomerId { get; set; }
+        public string UserEmail { get; set; }
 
     }
 }
